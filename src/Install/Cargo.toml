@@ -1,0 +1,36 @@
+[package]
+name = "Install"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+futures = "*"#:区域执行async/await>
+async-trait = "*"#:async-trait>[1.68<=版本使用]
+lazy_static = "*"#:惰性初始>
+once_cell = "*"#:|Cell模式全局数据>
+stretto = { version = "*", features = ["full"] }#:缓存>
+arc-swap = "*"#:原子锁>
+anyhow = "*"#:Result兼容处理>
+serde = { version = "*", features = ["derive"] }#:数据序列>
+serde_json = "*"#:json序列>
+quick-xml = { version = "*", features = ["serde", "async-tokio", "serialize", "serde-types", "overlapped-lists"] }#:配置文件>
+serde_json_borrow = "*"#:json>
+toml = { version = "*", features = ["indexmap"] }#:toml>
+hashbrown = { version = "*", features = ["serde", "ahash", "rayon"] }#:|哈希(性能)>
+serde_yaml = "*"#:yaml>
+cacache = { version = "*", features = ["tokio-stream", "async-std", "link_to", "mmap"] }#:磁盘>
+ssri = "*"#:磁盘必须hash>
+rbatis = { version = "*", features = ["rbatis-macro-driver"] }#:ORM(A)Mysql>
+rbdc = "*"#:ORM(B)Mysql>
+#rbdc-mysql = "*"#:ORM(C)Mysql>
+rbs = "*"#ORM(D)Mysql>
+rbdc-pg = "*"#:PostgreSQL(E)>
+sysinfo = "*"#:系统信息>
+sea-orm = { version = "*", features = ["sqlx-postgres", "sqlx-mysql", "runtime-tokio", "runtime-tokio-native-tls", "macros", "postgres-array", "with-json", "with-chrono", "uuid"] }#:ORM>
+sea-query = { version = "*", features = ["postgres-types", "postgres-interval", "postgres-array", "backend-mysql", "backend-postgres", "thread-safe", "attr", "derive"] }#:动态查询>
+deadpool-redis = { version = "*", features = ["serde"] }#:Redis链接>
+mysql_async = "*"#:Mysql语句执行>
+#tokio-postgres = "*"#:postgres语句执行>
+Static = { path = "../Static" }
