@@ -1,10 +1,13 @@
 use std::ops::Deref;
 
+use sea_orm::{DatabaseBackend, DatabaseConnection, EntityTrait, IntoMockRow, MockDatabase};
 use serde::{Deserialize, Serialize};
 
+use Static::Events;
 use Static::sql_orm::OrmEX;
 
 use crate::setting::local_config::SUPER_URL;
+use crate::tables::prelude::Database;
 
 //use crate::entities::prelude::*;
 /////# 数据库
@@ -108,13 +111,8 @@ impl Url for RedisUlr {
 }
 
 impl OrmEX for RedisUlr {
-	type Operate = ();
 	fn url(&self) -> String {
 		self.build_url()
-	}
-	
-	async fn insert(&self, e: Self::Operate) {
-		todo!()
 	}
 }
 
@@ -140,14 +138,31 @@ impl Default for PostgresUlr {
 }
 
 impl OrmEX for PostgresUlr {
-	type Operate = ();
 	fn url(&self) -> String {
 		self.build_url()
 	}
-	async fn insert(&self, e: Self::Operate) {
-		todo!()
-	}
 }
+
+pub mod tables {}
+
+pub trait SqlCommand {
+	///# 默认数据库
+	async fn default_psql<T, I, II>(e: II) -> Events<DatabaseConnection> where T: IntoMockRow
+	, I: IntoIterator<Item = T>, II: IntoIterator<Item = I>, {
+		Ok(MockDatabase::new(DatabaseBackend::Postgres)
+			.append_query_results(e)
+			.into_connection())
+	}
+	async fn default_myql<T, I, II>(e: II) -> Events<DatabaseConnection> where T: IntoMockRow
+	, I: IntoIterator<Item = T>, II: IntoIterator<Item = I>, {
+		Ok(MockDatabase::new(DatabaseBackend::MySql)
+			.append_query_results(e)
+			.into_connection())
+	}
+	async fn url_query() -> String;
+}
+
+impl Database {}
 
 ///# 默认数据库
 pub const DEFAULT_BUILD_DIR_POSTGRES: &str = "postgres";

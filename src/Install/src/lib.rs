@@ -12,7 +12,7 @@ pub mod system;
 pub mod io;
 pub mod setting;
 pub mod sql_url;
-//pub mod entities;
+pub mod tables;
 
 
 ///# 发布

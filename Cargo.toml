@@ -32,8 +32,8 @@ core_affinity = "*"#:cpu负载>
 #rbdc-pg = "*"#:PostgreSQL(E)>
 #mysql_async = "*"#:Mysql语句执行>
 #deadpool-redis = { version = "*", features = ["serde"] }#:Redis链接>
-#sea-orm = { version = "*", features = ["sqlx-postgres", "sqlx-mysql", "runtime-tokio", "runtime-tokio-native-tls", "macros", "postgres-array", "with-json", "with-chrono", "uuid"] }#:ORM>
-#sea-query = { version = "*", features = ["postgres-types", "postgres-interval", "postgres-array", "backend-mysql", "backend-postgres", "thread-safe", "attr", "derive"] }#:动态查询>
+sea-orm = { version = "*", features = ["sqlx-postgres", "sqlx-mysql", "runtime-tokio", "runtime-tokio-native-tls", "macros", "postgres-array", "with-json", "with-chrono", "uuid"] }#:ORM>
+sea-query = { version = "*", features = ["postgres-types", "postgres-interval", "postgres-array", "backend-mysql", "backend-postgres", "thread-safe", "attr", "derive"] }#:动态查询>
 #database<+>database<+>database<+>database<+>database<+>database<+>database<+>
 
 #serialization<+>serialization<+>serialization<+>serialization<+>serialization<+>

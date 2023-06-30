@@ -1,13 +1,15 @@
 use lazy_static::lazy_static;
 
-use crate::setting::{database_config::DATABASE_BUILD_DIR, local_config::SUPER_URL,service_config::SERVICE_BUILD_DIR};
+use crate::setting::{database_config::DATABASE_BUILD_DIR, local_config::SUPER_URL, service_config::SERVICE_BUILD_DIR};
 use crate::sql_url::{DEFAULT_BUILD_DIR_MARIADB, DEFAULT_BUILD_DIR_POSTGRES, Url};
 
 ///# 创建数据库
-pub const BUILD_DIR: &str = "create database atomic;";
+const INQUIRE_BUILD_DIR_SERVER: &str = "select tablename from pg_tables where tablename ='service';";
+const INQUIRE_BUILD_DIR_DATABASE: &str = "select tablename from pg_tables where tablename='database';";
 
 ///# 初始数据库必修
 pub const STRING_BUILD_SCALAR_DIR: [&str; 2] = [DATABASE_BUILD_DIR, SERVICE_BUILD_DIR];
+pub const JUDGEMENT: [&str; 2] = [INQUIRE_BUILD_DIR_DATABASE, INQUIRE_BUILD_DIR_SERVER];
 lazy_static! {
 	//默认数据url
 	pub static ref DEFAULT_URL:String={
@@ -22,11 +24,13 @@ pub mod service_config {
 	use serde::{Deserialize, Serialize};
 	
 	///# 创建结构
-	pub const SERVICE_BUILD_DIR: &str = "create table service
+	pub const SERVICE_BUILD_DIR: &str = "
+	create table service
 (
     id         serial
         constraint service_database_id_fk
-            references database,
+            references database
+        primary key,
     get_port   text,
     illustrate jsonb
 );";
@@ -41,7 +45,8 @@ pub mod database_config {
 	use serde::{Deserialize, Serialize};
 	
 	///# 创建结构
-	pub const DATABASE_BUILD_DIR: &str = "create table database
+	pub const DATABASE_BUILD_DIR: &str = "
+	create table database
 (
     id               serial
         constraint database_pk

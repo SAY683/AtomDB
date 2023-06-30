@@ -15,6 +15,9 @@ use tokio::task::JoinError;
 #[derive(Debug, Error)]
 pub enum ThreadEvents {
 	//未知错误
+	#[error("SqlxError{0:#?}")]
+	SqlxError(#[from] sqlx::Error),
+	//未知错误
 	#[error("UnknownError{0:#?}")]
 	UnknownError(#[from] anyhow::Error),
 	//线程运行错误

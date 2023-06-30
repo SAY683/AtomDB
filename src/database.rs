@@ -1,15 +1,18 @@
 use std::ops::Deref;
 
-use Install::setting::{BUILD_DIR, STRING_BUILD_SCALAR_DIR};
+use sea_orm::EntityTrait;
+
 use Install::setting::local_config::SUPER_URL;
-use Install::sql_url::PostgresUlr;
+use Install::tables::prelude::Database;
 use Static::Events;
 use Static::sql_orm::OrmEX;
-use Static::static_array::Archive;
 
 ///# 构建
 pub async fn build_graph_table_postgres() -> Events<()> {
-	let _ = PostgresUlr::default().run_one(BUILD_DIR).await;
-	SUPER_URL.deref().load().postgres.run(Archive(STRING_BUILD_SCALAR_DIR)).await;
+	let x = SUPER_URL.deref().load().postgres.connect().await?;
+	let x86_64 = Database::find().all(&x).await?;
+	x86_64.into_iter().for_each(|e|{
+		println!("{:?}",e);
+	});
 	Ok(())
 }
