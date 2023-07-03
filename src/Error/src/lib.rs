@@ -14,7 +14,14 @@ use tokio::task::JoinError;
 ///# 线程事件
 #[derive(Debug, Error)]
 pub enum ThreadEvents {
-	//未知错误
+	//redis错误
+	#[error("RedisCreateError{0:#?}")]
+	RedisCreateError(#[from] deadpool_redis::CreatePoolError),
+	#[error("RedisPoolError{0:#?}")]
+	RedisPoolError(#[from] deadpool_redis::PoolError),
+	#[error("RedisBuildError{0:#?}")]
+	RedisBuildError(#[from] deadpool_redis::BuildError),
+	//mysql错误
 	#[error("SqlxError{0:#?}")]
 	SqlxError(#[from] sqlx::Error),
 	//未知错误

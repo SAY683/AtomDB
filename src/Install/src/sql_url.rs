@@ -1,13 +1,14 @@
 use std::ops::Deref;
 
-use sea_orm::{DatabaseBackend, DatabaseConnection, EntityTrait, IntoMockRow, MockDatabase};
+use sea_orm::{DatabaseBackend, DatabaseConnection, IntoMockRow, MockDatabase};
 use serde::{Deserialize, Serialize};
+use tokio_postgres::{Client, Config, Connection, NoTls, Socket};
+use tokio_postgres::tls::NoTlsStream;
 
 use Static::Events;
 use Static::sql_orm::OrmEX;
 
 use crate::setting::local_config::SUPER_URL;
-use crate::tables::prelude::Database;
 
 //use crate::entities::prelude::*;
 /////# 数据库
@@ -128,6 +129,24 @@ pub struct PostgresUlr {
 	pub database: String,
 }
 
+impl PostgresUlr {
+	pub async fn config(&self) -> (Client, Connection<Socket, NoTlsStream>) {
+		let mut config = Config::new();
+		config.host(self.host.as_str());
+		config.user(self.name.as_str());
+		config.password(self.password.as_str());
+		config.dbname(self.database.as_str());
+		config.port({
+			if let Some(ref port) = self.port {
+				port.parse().unwrap()
+			} else {
+				"5432".parse().unwrap()
+			}
+		});
+		config.connect(NoTls).await.unwrap()
+	}
+}
+
 impl Default for PostgresUlr {
 	fn default() -> Self {
 		PostgresUlr {
@@ -142,8 +161,6 @@ impl OrmEX for PostgresUlr {
 		self.build_url()
 	}
 }
-
-pub mod tables {}
 
 pub trait SqlCommand {
 	///# 默认数据库
@@ -162,7 +179,6 @@ pub trait SqlCommand {
 	async fn url_query() -> String;
 }
 
-impl Database {}
 
 ///# 默认数据库
 pub const DEFAULT_BUILD_DIR_POSTGRES: &str = "postgres";

@@ -23,14 +23,14 @@ serde_yaml = "*"#:yaml>
 cacache = { version = "*", features = ["tokio-stream", "async-std", "link_to", "mmap"] }#:磁盘>
 ssri = "*"#:磁盘必须hash>
 rbatis = { version = "*", features = ["rbatis-macro-driver"] }#:ORM(A)Mysql>
-rbdc = "*"#:ORM(B)Mysql>
+#rbdc = "*"#:ORM(B)Mysql>
 #rbdc-mysql = "*"#:ORM(C)Mysql>
 rbs = "*"#ORM(D)Mysql>
-rbdc-pg = "*"#:PostgreSQL(E)>
+#rbdc-pg = "*"#:PostgreSQL(E)>
 sysinfo = "*"#:系统信息>
 sea-orm = { version = "*", features = ["sqlx-postgres", "sqlx-mysql", "runtime-tokio", "runtime-tokio-native-tls", "macros","sea-orm-macros","sea-query-binder","postgres-array", "with-json", "with-chrono", "uuid","mock"] }#:ORM>
 sea-query = { version = "*", features = ["postgres-types", "postgres-interval", "postgres-array", "backend-mysql", "backend-postgres", "thread-safe", "attr", "derive"] }#:动态查询>
 deadpool-redis = { version = "*", features = ["serde"] }#:Redis链接>
-mysql_async = "*"#:Mysql语句执行>
-#tokio-postgres = "*"#:postgres语句执行>
+#mysql_async = "*"#:Mysql语句执行>
+tokio-postgres = "*"#:postgres语句执行>
 Static = { path = "../Static" }

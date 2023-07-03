@@ -24,10 +24,11 @@ chrono = "*"#:Mysql|时间>
 #rbdc-mysql = "*"#:ORM(C)Mysql>
 #rbs = "*"#ORM(D)Mysql>
 #mysql_async = "*"#:Mysql语句执行>
-#deadpool-redis = { version = "*", features = ["serde"] }#:Redis链接>
+deadpool-redis = { version = "*", features = ["serde"] }#:Redis链接>
 sea-orm = { version = "*", features = ["sqlx-postgres", "sqlx-mysql", "runtime-tokio", "runtime-tokio-native-tls", "macros", "postgres-array", "with-json", "with-chrono", "uuid"] }#:ORM>
 sea-query = { version = "*", features = ["postgres-types", "postgres-interval", "postgres-array", "backend-mysql", "backend-postgres", "thread-safe", "attr", "derive"] }#:动态查询>
 sqlx = { version = "*", features = ["all-databases", "all-types", "runtime-actix", "macros"] }#:sqlx>
+tokio-postgres = { version = "*", features = ["array-impls"] }#:原始查询>
 #database<+>database<+>database<+>database<+>database<+>database<+>database<+>
 
 #serialization<+>serialization<+>serialization<+>serialization<+>serialization<+>

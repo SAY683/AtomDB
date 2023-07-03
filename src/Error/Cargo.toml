@@ -15,3 +15,4 @@ stretto = { version = "*", features = ["full"] }#:缓存>
 cacache = { version = "*", features = ["tokio-stream", "async-std", "link_to", "mmap"] }#:磁盘>
 sea-orm = { version = "*", features = ["runtime-tokio", "uuid", "macros", "postgres-array"] }#:ORM>
 sqlx = { version = "*", features = ["all-databases", "all-types", "runtime-actix", "macros"] }#:sqlx>
+deadpool-redis = { version = "*", features = ["serde"] }#:Redis链接>
