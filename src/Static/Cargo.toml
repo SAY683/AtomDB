@@ -96,7 +96,7 @@ ftlog = "*"#log(C)>
 #clap = { version = "*", features = ["derive", "deprecated", "env", "wrap_help", "string"] }#:Shll命令解析>
 sysinfo = "*"#:系统信息>
 #enigo = { github = "https://github.com/enigo-rs/enigo" }#:操作键盘>
-#async-channel = "*"#:线程通信>
+async-channel = "*"#:线程通信>
 #eventHandling<+>eventHandling<+>eventHandling<+>eventHandling<+>eventHandling<+>eventHandling<+>
 
 #network<+>network<+>network<+>network<+>network<+>network<+>network<+>network<+>network<+>

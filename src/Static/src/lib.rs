@@ -7,12 +7,14 @@
 #![feature(async_fn_in_trait)]
 #![feature(impl_trait_projections)]
 
+use std::any::Any;
 use std::env::current_dir;
 use std::env::current_exe;
 use std::path::PathBuf;
 use std::sync::Arc;
 
 use anyhow::Result;
+use bevy_reflect::Reflect;
 use futures::executor::LocalPool;
 use futures::task::SpawnExt;
 use lazy_static::lazy_static;
@@ -73,7 +75,7 @@ lazy_static! {
 /*
 Example::run(Example::aggregation()).await.unwrap();
 */
-#[derive(Copy, Clone, Debug)]
+#[derive(Copy, Clone, Debug, Reflect)]
 pub struct Example;
 
 impl Alexia<Example> for Example {
@@ -85,7 +87,7 @@ impl Alexia<Example> for Example {
 	}
 }
 
-pub trait Alexia<NTD: Send + Sized + Sync> {
+pub trait Alexia<NTD: Send + Sized + Sync>: Any + Reflect {
 	///# 单线程运行
 	fn submit(e: Vec<std::thread::JoinHandle<NTD>>) -> Events<Arc<SyncCow<Vec<NTD>>>>
 		where
@@ -172,5 +174,64 @@ pub trait Alexia<NTD: Send + Sized + Sync> {
 			});
 		});
 		Ok(ert)
+	}
+}
+
+///#通信
+pub mod communicate_src {
+	use std::sync::{Arc, Mutex};
+	
+	use async_channel::{Receiver, Sender};
+	
+	///# Tok_io 提供了多种消息通道，可以满足不同场景的需求:
+	///  ####
+	/// [mpsc], [多生产]者，[单消费]者模式
+	///  ####
+	/// [ones_hot], [单生产]者[单消费]，[一次]只能[发送]一条消息
+	///  ####
+	/// [broadcast]，[多生产]者，[多消费]者，其中每一条发送的消息都可以被所有接收者收到，因此是[广播]
+	///  ####
+	/// [watch]，[单生产]者，[多消费]者，只[保存一条最新]的消息，因此接收者只能看到最近的一条消息，例如，这种模式适用于配置文件变化的监听
+	///  ####
+	/// [async-channel][多生产]者、[多消费]者，且[每一条消息只能被其中一个]消费者接收
+	
+	///[基本]通信
+	pub struct Basic<'fgo, G: Sized + Send + Sync>
+	(pub Arc<Mutex<Sender<G>>>,
+	 pub Arc<Mutex<Receiver<G>>>);
+	
+	///# 记录
+	pub mod record {
+		use std::borrow::Cow;
+		use std::cell::Cell;
+		use std::collections::{BinaryHeap, BTreeSet, HashMap};
+		use std::mem::ManuallyDrop;
+		use std::sync::{Arc, Weak};
+		
+		///[文本]
+		pub struct Txt<'ef>(pub Arc<BTreeSet<&'ef str>>);
+		
+		///[数字]
+		pub struct Number(pub Cell<f64>);
+		
+		///[段落]
+		#[derive(Eq, Ord, PartialOrd, PartialEq, Hash)]
+		pub struct Bit<'ef>(pub Cow<'ef, &'ef str>);
+		
+		///[字典]
+		pub struct Dictionary<'ef>(pub HashMap<Bit<'ef>, &'ef str>);
+		
+		///[引用]
+		pub struct Learn<Gc: Sized + Send + Send>(pub Weak<Gc>);
+		
+		///[队列]
+		pub struct Queue(pub BinaryHeap<i64>);
+		
+		///[特殊类型]
+		pub union SpecialYield<'ef> {
+			pub reference: *const f64,
+			pub record_point: *mut &'ef str,
+			pub synchronize: ManuallyDrop<String>,
+		}
 	}
 }

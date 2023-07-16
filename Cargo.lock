@@ -101,6 +101,7 @@ dependencies = [
  "Error",
  "anyhow",
  "arc-swap",
+ "async-channel",
  "async-trait",
  "bevy_reflect",
  "bytes",
