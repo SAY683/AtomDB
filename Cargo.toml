@@ -110,7 +110,8 @@ uuid = { version = "*", features = ["v4", "v7"] }#:ID>
 #reqwest = { version = "*", features = ["json", "socks", "stream", "blocking"] }#:http处理[单线程阻塞]A>
 #scraper = "*"#:Css解析http处理B>
 tarpc = { version = "*", features = ["tokio1", "serde1", "serde-transport", "serde-transport-json", "tokio-serde"] }#:RPC>
-quinn = "*"#:QUIC>
+quinn = { version = "*", features = ["futures-io", "lock_tracking"] }#:QUIC>
+opendal = { version = "*", features = ["services-ftp", "services-hdfs"] }#:文件存储>
 #async-graphql = { version = "*", features = ["tokio", "url", "uuid", "cbor", "hashbrown", "dataloader"] }#:请求机>
 #native-tls = { version = "*", features = ["alpn", "vendored"] }#:tls网络>
 #pyo3 = {version ="*",features = ["extension-module"] }#:python交互>
