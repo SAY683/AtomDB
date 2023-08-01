@@ -1,10 +1,12 @@
 #![feature(read_buf)]
 
-use std::fmt::Display;
+use std::fmt::{Display, Formatter};
 
 use comfy_table::{Attribute, Cell, Color, ContentArrangement, Table};
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL;
+use dialoguer::{Input, Password, Select};
+use dialoguer::console::Term;
 use indicatif::ProgressBar;
 
 pub mod db_view;
@@ -27,6 +29,18 @@ pub enum Colour {
 	Function,
 }
 
+impl Display for Colour {
+	fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+		match self {
+			Colour::Error => { write!(f, "ERROR") }
+			Colour::Output => { write!(f, "OUTPUT") }
+			Colour::Order => { write!(f, "ORDER") }
+			Colour::Monitoring => { write!(f, "MONITORING") }
+			Colour::Function => { write!(f, "FUNCTION") }
+		}
+	}
+}
+
 ///#数据
 pub struct Information<EF: Display, ER: IntoIterator<Item = EF>, GL: IntoIterator<Item = ER>> {
 	///列表
@@ -37,21 +51,52 @@ pub struct Information<EF: Display, ER: IntoIterator<Item = EF>, GL: IntoIterato
 
 ///# 显示
 pub trait ViewDrive {
-	const SIGNAL: u64;
-	fn view(&self) -> Frames;
+	type Frame;
+	const SIGNAL: u64 = 100;
+	fn view(&self) -> Self::Frame;
 	fn table<EF: Display, ER: IntoIterator<Item = EF>, GL: IntoIterator<Item = ER>>(
 		&self,
 		_: Information<EF, ER, GL>,
-	) -> Table;
+	) -> Table where Self: Display {
+		println!("{}", self);
+		Table::new()
+	}
 	///# 进度条
 	fn view_column() -> ProgressBar {
 		ProgressBar::new(Self::SIGNAL)
 	}
+	///# 输入
+	fn input_column(position: Vec<String>) -> std::io::Result<String> {
+		let mut os = Input::<String>::new();
+		position.into_iter().for_each(|e| { os.with_prompt(e); });
+		os.interact()
+	}
+	///# 选择输入
+	fn select_column(position: Vec<&str>, rows: Option<Vec<&str>>) -> std::io::Result<usize> {
+		let mut os = Select::new();
+		os.items(&position);
+		if let Some(ro) = rows {
+			ro.into_iter().for_each(|e| {
+				os.with_prompt(e);
+			})
+		}
+		os.default(0);
+		os.interact_on_opt(&Term::buffered_stderr())?;
+		os.interact()
+	}
+	///# 密码
+	fn password_column(position: Vec<&str>) -> std::io::Result<String> {
+		let mut password = Password::new();
+		position.into_iter().for_each(|e| {
+			password.with_prompt(e);
+		});
+		password.interact()
+	}
 }
 
 impl ViewDrive for Colour {
-	const SIGNAL: u64 = 100;
-	fn view(&self) -> Frames {
+	type Frame = Frames;
+	fn view(&self) -> Self::Frame {
 		match self {
 			Colour::Error => Frames {
 				text: Attribute::Italic,

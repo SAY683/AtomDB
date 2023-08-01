@@ -196,7 +196,7 @@ pub mod communicate_src {
 	/// [async-channel][多生产]者、[多消费]者，且[每一条消息只能被其中一个]消费者接收
 	
 	///[基本]通信
-	pub struct Basic<'fgo, G: Sized + Send + Sync>
+	pub struct Basic<G: Sized + Send + Sync>
 	(pub Arc<Mutex<Sender<G>>>,
 	 pub Arc<Mutex<Receiver<G>>>);
 	
