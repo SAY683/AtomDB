@@ -36,7 +36,6 @@ use crate::function_frame::Execution;
 pub mod macros;
 pub mod closure;
 pub mod static_array;
-pub mod sql_orm;
 pub mod aggregation;
 pub mod alex;
 pub mod base;
@@ -206,6 +205,7 @@ pub mod communicate_src {
 		use std::cell::Cell;
 		use std::collections::{BinaryHeap, BTreeSet, HashMap};
 		use std::mem::ManuallyDrop;
+		use std::ptr::NonNull;
 		use std::sync::{Arc, Weak};
 		
 		///[文本]
@@ -232,6 +232,7 @@ pub mod communicate_src {
 			pub reference: *const f64,
 			pub record_point: *mut &'ef str,
 			pub synchronize: ManuallyDrop<String>,
+			pub non: NonNull<*mut &'ef str>,
 		}
 	}
 }

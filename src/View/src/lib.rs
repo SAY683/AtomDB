@@ -8,8 +8,6 @@ use comfy_table::presets::UTF8_FULL;
 use dialoguer::{Confirm, FuzzySelect, Input, MultiSelect, Password, Select};
 use indicatif::ProgressBar;
 
-pub mod db_view;
-
 /*
 单独模块不接受其他库
 */

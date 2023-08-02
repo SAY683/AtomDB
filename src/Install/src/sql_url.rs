@@ -1,12 +1,13 @@
 use std::ops::Deref;
 
-use sea_orm::{DatabaseBackend, DatabaseConnection, IntoMockRow, MockDatabase};
+use deadpool_redis::{Config as Conf, Pool, Runtime};
+use sea_orm::{ConnectionTrait, Database, DatabaseConnection, ExecResult, QueryResult, Statement};
 use serde::{Deserialize, Serialize};
 use tokio_postgres::{Client, Config, Connection, NoTls, Socket};
 use tokio_postgres::tls::NoTlsStream;
 
 use Static::Events;
-use Static::sql_orm::OrmEX;
+use Static::static_array::Archive;
 
 use crate::setting::local_config::SUPER_URL;
 
@@ -29,6 +30,43 @@ pub trait Url {
 		xx
 	}
 }
+
+pub trait OrmEX {
+	fn url(&self) -> String;
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	async fn default_connect(e: String) -> Events<DatabaseConnection> {
+		Ok(Database::connect(e).await?)
+	}
+	async fn connect(&self) -> Events<DatabaseConnection> {
+		Ok(Database::connect(self.url()).await?)
+	}
+	async fn run_all<const LK: usize>(&self, event: Archive<&str, LK>) -> Events<Vec<Vec<QueryResult>>> {
+		let db = self.connect().await?;
+		let mut x = vec![];
+		for e in event.into_iter() {
+			x.push(db.query_all(Statement::from_string(db.get_database_backend(), e.to_string())).await?);
+		}
+		db.close().await?;
+		Ok(x)
+	}
+	async fn run_execute<const LK: usize>(&self, event: Archive<&str, LK>) -> Events<Vec<ExecResult>> {
+		let db = self.connect().await?;
+		let mut x = vec![];
+		for e in event.into_iter() {
+			x.push(db.execute(Statement::from_string(db.get_database_backend(), e.to_string())).await?);
+		}
+		db.close().await?;
+		Ok(x)
+	}
+	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	async fn redis_connection(&self) -> Conf {
+		Conf::from_url(self.url())
+	}
+	async fn redis_pool(&self) -> Events<Pool> {
+		Ok(self.redis_connection().await.create_pool(Some(Runtime::Tokio1))?)
+	}
+}
+
 
 ///# Mysql_Ulr
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -69,11 +107,6 @@ impl Url for MysqlUlr {
 	}
 }
 
-impl SqlCommand for MysqlUlr {
-	async fn url_query(&self) -> String {
-		self.build_url()
-	}
-}
 
 ///# Redis_Ulr
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]
@@ -168,30 +201,6 @@ impl OrmEX for PostgresUlr {
 		self.build_url()
 	}
 }
-
-impl SqlCommand for PostgresUlr {
-	async fn url_query(&self) -> String {
-		self.build_url()
-	}
-}
-
-pub trait SqlCommand {
-	///# 默认数据库
-	async fn default_psql<T, I, II>(e: II) -> Events<DatabaseConnection> where T: IntoMockRow
-	, I: IntoIterator<Item = T>, II: IntoIterator<Item = I>, {
-		Ok(MockDatabase::new(DatabaseBackend::Postgres)
-			.append_query_results(e)
-			.into_connection())
-	}
-	async fn default_myql<T, I, II>(e: II) -> Events<DatabaseConnection> where T: IntoMockRow
-	, I: IntoIterator<Item = T>, II: IntoIterator<Item = I>, {
-		Ok(MockDatabase::new(DatabaseBackend::MySql)
-			.append_query_results(e)
-			.into_connection())
-	}
-	async fn url_query(&self) -> String;
-}
-
 
 ///# 默认数据库
 pub const DEFAULT_BUILD_DIR_POSTGRES: &str = "postgres";
