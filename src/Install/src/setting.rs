@@ -66,7 +66,7 @@ pub mod local_config {
 	use once_cell::sync::Lazy;
 	use serde::{Deserialize, Serialize};
 	
-	use crate::LOCAL_BIN_FILR;
+	use crate::{LOCAL_BIN_DIR_FILR, LOCAL_BIN_FILR};
 	use crate::sql_url::{MysqlUlr, PostgresUlr, RedisUlr};
 	use crate::system::{InstallUtils, Toml};
 	
@@ -83,4 +83,13 @@ pub mod local_config {
 	impl InstallUtils for LocalConfig {}
 	
 	impl Toml for LocalConfig {}
+	///+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+	pub static SUPER_DLR_URL: Lazy<ArcSwap<LocalConfigToml>> = Lazy::new(|| { ArcSwap::from_pointee(LocalConfigToml::toml_build(LOCAL_BIN_DIR_FILR.as_path()).unwrap()) });
+	
+	#[derive(Serialize, Deserialize, Clone, Debug)]
+	pub struct LocalConfigToml {}
+	
+	impl InstallUtils for LocalConfigToml {}
+	
+	impl Toml for LocalConfigToml {}
 }
