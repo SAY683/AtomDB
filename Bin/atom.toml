@@ -1,0 +1,28 @@
+[postgres]
+start = false
+name = "root"
+password = "683S@y683"
+host = "localhost"
+#port="5432"
+database = "atomic"
+[mysql]#没有完成
+start = false
+name = "root"
+password = "683S@y683"
+host = "localhost"
+#port="?"
+database = "cabinet"
+[redis]#制作中
+start = false
+#name=""
+#password=""
+host = ""
+#port = ""
+database = ""
+[mariadb]#没有完成
+start = false
+name = "root"
+password = "683S@y683"
+host = "localhost"
+#port="?"
+database = "cabinet"
