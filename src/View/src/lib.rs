@@ -5,8 +5,7 @@ use std::fmt::{Display, Formatter};
 use comfy_table::{Attribute, Cell, Color, ContentArrangement, Table};
 use comfy_table::modifiers::UTF8_ROUND_CORNERS;
 use comfy_table::presets::UTF8_FULL;
-use dialoguer::{Input, Password, Select};
-use dialoguer::console::Term;
+use dialoguer::{Confirm, FuzzySelect, Input, MultiSelect, Password, Select};
 use indicatif::ProgressBar;
 
 pub mod db_view;
@@ -61,36 +60,33 @@ pub trait ViewDrive {
 		println!("{}", self);
 		Table::new()
 	}
+	///# 选择
+	fn view_container(e: &str) -> std::io::Result<bool> {
+		Confirm::new().with_prompt(e).interact()
+	}
 	///# 进度条
 	fn view_column() -> ProgressBar {
 		ProgressBar::new(Self::SIGNAL)
 	}
-	///# 输入
-	fn input_column(position: Vec<String>) -> std::io::Result<String> {
-		let mut os = Input::<String>::new();
-		position.into_iter().for_each(|e| { os.with_prompt(e); });
-		os.interact()
-	}
 	///# 选择输入
-	fn select_column(position: Vec<&str>, rows: Option<Vec<&str>>) -> std::io::Result<usize> {
-		let mut os = Select::new();
-		os.items(&position);
-		if let Some(ro) = rows {
-			ro.into_iter().for_each(|e| {
-				os.with_prompt(e);
-			})
-		}
-		os.default(0);
-		os.interact_on_opt(&Term::buffered_stderr())?;
-		os.interact()
+	fn select_column(position: &Vec<&str>, rows: &str) -> std::io::Result<usize> {
+		Select::new().items(position).with_prompt(rows).interact()
 	}
 	///# 密码
-	fn password_column(position: Vec<&str>) -> std::io::Result<String> {
-		let mut password = Password::new();
-		position.into_iter().for_each(|e| {
-			password.with_prompt(e);
-		});
-		password.interact()
+	fn password_column(position: &str) -> std::io::Result<String> {
+		Password::new().with_prompt(position).interact()
+	}
+	///# 多选择
+	fn select_mult_column(position: &Vec<&str>, rows: &str) -> std::io::Result<Vec<usize>> {
+		MultiSelect::new().items(position).with_prompt(rows).interact()
+	}
+	///# 选择
+	fn select_funz_column(position: &Vec<&str>) -> std::io::Result<usize> {
+		FuzzySelect::new().items(&position).interact()
+	}
+	///# 输入
+	fn input_column(position: &str) -> std::io::Result<String> {
+		Input::new().with_prompt(position).interact()
 	}
 }
 

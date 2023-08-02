@@ -15,5 +15,6 @@ pub mod database;
 pub async fn main() -> Events<()> {
 	build_graph_table_postgres().await?;
 	println!("{}", Colour::Function.table(Information { list: ["12"], data: [["12"]] }));
+	Colour::select_funz_column(&vec!["1","2"]).unwrap();
 	Ok(())
 }
