@@ -62,10 +62,14 @@ impl Display for DiskMode {
 }
 
 pub mod file_handler {
-    use std::fs;
+    use std::{fs};
+    use std::net::{SocketAddr};
+    use std::ops::Deref;
     use std::path::{Path, PathBuf};
     use std::sync::Arc;
+    use arc_swap::access::Access;
     use spin::RwLock;
+    use tokio::io::AsyncWriteExt;
     use uuid::fmt::Urn;
     use uuid::Uuid;
     use Static::alex::Overmaster;
@@ -73,6 +77,9 @@ pub mod file_handler {
     use Static::Events;
     use View::{Colour, Information, ViewDrive};
     use crate::io::{Disk, DiskMode, DiskWrite, KVStore};
+    use crate::setting::local_config::SUPER_URL;
+    use crate::sql_url::OrmEX;
+    use crate::tables::{database, service};
 
     ///正式操作
     pub fn write_dds(file: &str, modes: DiskMode) -> Vec<FutureEx<'static, Overmaster, Events<DiskWrite>>> {
@@ -80,12 +87,21 @@ pub mod file_handler {
         let mut xls = vec![];
         let psa = kv_as_disk_modes(file).unwrap();
         let play = Arc::new(RwLock::new(Colour::view_column(psa.len() as u64)));
+        let name = Arc::new(Colour::input_column("name").unwrap());
+        let server = Arc::new(loop {
+            match Colour::input_column("network").unwrap().parse::<SocketAddr>() {
+                Ok(e) => { break e; }
+                Err(e) => { eprintln!("{}", e) }
+            }
+        });
         psa.into_iter().for_each(|i| {
             let play = play.clone();
+            let name = name.clone();
+            let server = server.clone();
             xls.push(FutureEx::AsyncTraitSimple(Box::pin(async move {
                 let kv = i;
-                println!("{}", kv.key.clone().unwrap().as_str());
                 play.write().inc(1);
+                let uuid = kv.key.clone().unwrap();
                 match match modes {
                     DiskMode::HASH => { Some(kv.hash_write().await) }
                     DiskMode::MAP => { Some(kv.write_buf().await) }
@@ -100,8 +116,23 @@ pub mod file_handler {
                     }
                 } {
                     None => {}
-                    Some(_e) => {
-                        let _time=KVStore::<String,String>::io_time();
+                    Some(e) => {
+                        let time = KVStore::<String, String>::io_time();
+                        let name = name.to_string();
+                        let sev = *server;
+                        let mut set = SUPER_URL.deref().load().postgres.connect().await?;
+                        database::Model::insert(&mut set, &database::Model {
+                            name: name.to_string(),
+                            uuid: Uuid::parse_str(&uuid).unwrap(),
+                            time: Some(time.naive_local()),
+                            hash: Some(e.to_string()),
+                        }).await?;
+                        service::Model::insert(&mut set, &service::Model {
+                            uuid: Uuid::parse_str(&uuid).unwrap(),
+                            service_port: Some(sev.to_string()),
+                            name: Some(name.to_string()),
+                            framework: None,
+                        }).await?;
                     }
                 }
                 if play.read().position() == 1 {

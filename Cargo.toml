@@ -119,9 +119,9 @@ opendal = { version = "*", features = ["services-ftp"] }#:文件存储>
 #network<+>network<+>network<+>network<+>network<+>network<+>network<+>network<+>network<+>
 
 #Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>
-#actix-cors = "*"#:Web性能A>
-#actix-web = { version = "*", features = ["secure-cookies", "actix-web-codegen"] }#:Web性能B>
-#actix-rt = { version = "*", features = ["actix-macros", "tokio-uring"] }#:Web性能C>
+actix-cors = "*"#:Web性能A>
+actix-web = { version = "*", features = ["secure-cookies", "actix-web-codegen"] }#:Web性能B>
+actix-rt = { version = "*", features = ["actix-macros", "tokio-uring"] }#:Web性能C>
 #rocket = "*"#:Web安全>
 #tower = { version = "*", features = ["full"] }#:Web构建>
 #jsonwebtoken = "*"#:json验证>

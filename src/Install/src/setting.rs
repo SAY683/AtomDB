@@ -11,7 +11,7 @@ pub const JUDGEMENT: [(&str, &str); 2] = [(INQUIRE_BUILD_DIR_DATABASE, DATABASE_
 pub mod database_config {
     use rbatis::crud;
     use sea_orm::{IdenStatic};
-    use serde::{Deserialize, Serialize};
+    use sea_orm::EntityTrait;
 
     ///# 创建结构
     pub const SERVICE_BUILD_DIR: &str = r#"
@@ -30,11 +30,9 @@ pub mod database_config {
         unique ("Name", "ServicePort")
 );
     "#;
+    crud!(crate::tables::service::Model{});
 
-    #[derive(Serialize, Deserialize, Clone, Debug)]
-    pub struct Service {}
-    crud!(Service{});
-
+    pub fn test_service_db() {}
 
     ///# 创建结构
     pub const DATABASE_BUILD_DIR: &str = r#"
@@ -51,13 +49,11 @@ pub mod database_config {
         unique ("Time", "Hash")
 );
   "#;
-
-    #[derive(Serialize, Deserialize, Clone, Debug)]
-    pub struct DatabaseConfig {}
-    crud!(DatabaseConfig{});
+    crud!(crate::tables::database::Model{});
 }
 
 pub mod local_config {
+    use std::net::{SocketAddr};
     use arc_swap::ArcSwap;
     use once_cell::sync::Lazy;
     use serde::{Deserialize, Serialize};
@@ -84,7 +80,9 @@ pub mod local_config {
     pub static SUPER_DLR_URL: Lazy<ArcSwap<LocalConfigToml>> = Lazy::new(|| { ArcSwap::from_pointee(LocalConfigToml::toml_build(LOCAL_BIN_DIR_FILR.as_path()).unwrap()) });
 
     #[derive(Serialize, Deserialize, Clone, Debug)]
-    pub struct LocalConfigToml {}
+    pub struct LocalConfigToml {
+        pub port: SocketAddr,
+    }
 
     impl InstallUtils for LocalConfigToml {}
 

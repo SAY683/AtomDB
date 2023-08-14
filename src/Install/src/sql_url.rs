@@ -45,7 +45,6 @@ pub trait OrmEX {
     async fn connect(&self) -> Events<DatabaseConnection> {
         Ok(Database::connect(self.url()).await?)
     }
-
     async fn run_table<E>(&self, table: E) -> Events<()> where E: EntityTrait {
         let db = self.connect().await?;
         let builder = db.get_database_backend();
@@ -195,7 +194,7 @@ impl PostgresUlr {
     ///# 执行
     pub async fn connect_rab_execute(&self, sql: &str) -> Events<rbdc::db::ExecResult> {
         let mut x = self.connect_rab().await?;
-        let xa=x.exec(sql, vec![]).await?;
+        let xa = x.exec(sql, vec![]).await?;
         x.close().await?;
         Ok(xa)
     }
