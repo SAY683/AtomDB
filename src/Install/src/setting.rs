@@ -17,6 +17,17 @@ pub mod database_config {
     pub const SERVICE_BUILD_DIR: &str = r#"
     create table service
 (
+    "Uuid"        uuid not null
+        constraint service_pk
+            primary key
+        constraint "service_database_Uuid_fk"
+            references database ("Uuid")
+            on update cascade on delete restrict,
+    "ServicePort" inet,
+    "Name"        text,
+    "Framework"   json,
+    constraint service_pk2
+        unique ("Name", "ServicePort")
 );
     "#;
 
@@ -29,14 +40,15 @@ pub mod database_config {
     pub const DATABASE_BUILD_DIR: &str = r#"
     create table database
 (
-    UUID   uuid
-        constraint database_pk
-            primary key,
-    "Name" text,
-    "Hash" text,
+    "Name" text not null,
+    "Uuid" uuid not null
+        unique,
     "Time" timestamp,
+    "Hash" text,
+    constraint database_pk
+        primary key ("Name", "Uuid"),
     constraint database_pk2
-        unique ("Name", "Hash")
+        unique ("Time", "Hash")
 );
   "#;
 

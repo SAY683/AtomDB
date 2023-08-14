@@ -5,9 +5,37 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
 #[sea_orm(table_name = "service")]
-pub struct Model {}
+pub struct Model {
+    #[sea_orm(column_name = "Uuid", primary_key, auto_increment = false)]
+    pub uuid: Uuid,
+    #[sea_orm(
+        column_name = "ServicePort",
+        column_type = "custom(\"inet\")",
+        nullable
+    )]
+    pub service_port: Option<String>,
+    #[sea_orm(column_name = "Name", column_type = "Text", nullable)]
+    pub name: Option<String>,
+    #[sea_orm(column_name = "Framework")]
+    pub framework: Option<Json>,
+}
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
-pub enum Relation {}
+pub enum Relation {
+    #[sea_orm(
+        belongs_to = "super::database::Entity",
+        from = "Column::Uuid",
+        to = "super::database::Column::Uuid",
+        on_update = "Cascade",
+        on_delete = "Restrict"
+    )]
+    Database,
+}
+
+impl Related<super::database::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Database.def()
+    }
+}
 
 impl ActiveModelBehavior for ActiveModel {}
