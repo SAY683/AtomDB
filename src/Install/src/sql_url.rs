@@ -3,7 +3,8 @@ use std::fmt::{Display, Formatter};
 use std::ops::Deref;
 
 use deadpool_redis::{Config as Conf, Pool, Runtime};
-use rbdc::db::Connection as Con;
+use rbatis::RBatis;
+use rbdc::db::{Connection as Con, Driver};
 use rbdc_pg::connection::PgConnection;
 use rbdc_pg::options::PgConnectOptions;
 use sea_orm::{ConnectionTrait, Database, DatabaseConnection, EntityTrait, ExecResult, QueryResult, Schema, Statement};
@@ -45,6 +46,7 @@ pub trait OrmEX {
     async fn connect(&self) -> Events<DatabaseConnection> {
         Ok(Database::connect(self.url()).await?)
     }
+    async fn connect_rab(&self) -> RBatis { todo!() }
     async fn run_table<E>(&self, table: E) -> Events<()> where E: EntityTrait {
         let db = self.connect().await?;
         let builder = db.get_database_backend();
