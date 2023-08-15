@@ -67,10 +67,11 @@ pub mod file_handler {
     use std::ops::Deref;
     use std::path::{Path, PathBuf};
     use std::sync::Arc;
+    use anyhow::anyhow;
     use spin::RwLock;
-    use tokio::io::AsyncWriteExt;
     use uuid::fmt::Urn;
     use uuid::Uuid;
+    use Error::ThreadEvents;
     use Static::alex::Overmaster;
     use Static::base::FutureEx;
     use Static::Events;
@@ -79,69 +80,71 @@ pub mod file_handler {
     use crate::setting::database_config::{DatabaseConfig, ServiceConfig};
     use crate::setting::local_config::SUPER_URL;
     use crate::sql_url::OrmEX;
-    use crate::tables::{database, service};
 
     ///正式操作
     pub fn write_dds(file: &str, modes: DiskMode) -> Vec<FutureEx<'static, Overmaster, Events<DiskWrite>>> {
         println!("{}", Colour::Output.table(Information { list: vec!["File|文件", "Modes|模式"], data: vec![vec![format!("{}", &file).as_str(), format!("{}", &modes).as_str()]] }));
         let mut xls = vec![];
-        let psa = kv_as_disk_modes(file).unwrap();
-        let play = Arc::new(RwLock::new(Colour::view_column(psa.len() as u64)));
-        let name = Arc::new(Colour::input_column("name").unwrap());
-        let server = Arc::new(loop {
-            match Colour::input_column("network").unwrap().parse::<SocketAddr>() {
-                Ok(e) => { break e; }
-                Err(e) => { eprintln!("{}", e) }
-            }
-        });
-        psa.into_iter().for_each(|i| {
-            let play = play.clone();
-            let name = name.clone();
-            let server = server.clone();
-            xls.push(FutureEx::AsyncTraitSimple(Box::pin(async move {
-                let kv = i;
-                play.write().inc(1);
-                let uuid = kv.key.clone().unwrap();
-                match match modes {
-                    DiskMode::HASH => { Some(kv.hash_write().await) }
-                    DiskMode::MAP => { Some(kv.write_buf().await) }
-                    DiskMode::Cache => {
-                        match kv.link().await {
-                            Ok(e) => { Some(e) }
-                            Err(e) => {
-                                eprintln!("{:#?}", e);
-                                None
+        match kv_as_disk_modes(file) {
+            Ok(psa) => {
+                let play = Arc::new(RwLock::new(Colour::view_column(psa.len() as u64)));
+                let name = Arc::new(Colour::input_column("name").unwrap());
+                let server = Arc::new(loop {
+                    match Colour::input_column_def("network", "127.0.0.1:").unwrap().parse::<SocketAddr>() {
+                        Ok(e) => { break e; }
+                        Err(e) => { eprintln!("{}", e) }
+                    }
+                });
+                psa.into_iter().for_each(|i| {
+                    let play = play.clone();
+                    let name = name.clone();
+                    let server = server.clone();
+                    xls.push(FutureEx::AsyncTraitSimple(Box::pin(async move {
+                        let kv = i;
+                        play.write().inc(1);
+                        let uuid = kv.key.clone().unwrap();
+                        match match modes {
+                            DiskMode::HASH => { Some(kv.hash_write().await) }
+                            DiskMode::MAP => { Some(kv.write_buf().await) }
+                            DiskMode::Cache => {
+                                match kv.link().await {
+                                    Ok(e) => { Some(e) }
+                                    Err(e) => {
+                                        eprintln!("{:#?}", e);
+                                        None
+                                    }
+                                }
+                            }
+                        } {
+                            None => { eprintln!("信息损坏") }
+                            Some(e) => {
+                                let time = KVStore::<String, String>::io_time();
+                                let name = name.to_string();
+                                let sev = *server;
+                                let mut set = SUPER_URL.deref().load().postgres.connect_bdc().await?;
+                                DatabaseConfig::insert(&mut set, &DatabaseConfig {
+                                    name: name.to_string(),
+                                    uuid: Uuid::parse_str(&uuid).unwrap(),
+                                    time: Some(time.naive_local()),
+                                    hash: Some(e.to_string()),
+                                }).await?;
+                                ServiceConfig::insert(&mut set, &ServiceConfig {
+                                    uuid: Uuid::parse_str(&uuid).unwrap(),
+                                    service_port: Some(sev.to_string()),
+                                    name: Some(name.to_string()),
+                                    framework: None,
+                                }).await?;
                             }
                         }
-                    }
-                } {
-                    None => {}
-                    Some(e) => {
-                        let time = KVStore::<String, String>::io_time();
-                        let name = name.to_string();
-                        let sev = *server;
-                        let mut set = SUPER_URL.deref().load().postgres.connect_bdc().await?;
-                        DatabaseConfig::insert(&mut set, &DatabaseConfig {
-                            name: name.to_string(),
-                            uuid: Uuid::parse_str(&uuid).unwrap(),
-                            time: Some(time.naive_local()),
-                            hash: Some(e.to_string()),
-                        }).await?;
-                        ServiceConfig::insert(&mut set, &ServiceConfig {
-                            uuid: Uuid::parse_str(&uuid).unwrap(),
-                            service_port: Some(sev.to_string()),
-                            name: Some(name.to_string()),
-                            framework: None,
-                        }).await?;
-                    }
-                }
-                if play.read().position() == 1 {
-                    play.read().finish();
-                };
-                Ok(DiskWrite)
-            })));
-        });
-        println!("Start...");
+                        if play.read().position() == 1 {
+                            play.read().finish();
+                        };
+                        Ok(DiskWrite)
+                    })));
+                });
+            }
+            Err(e) => { eprintln!("{:?}", e); }
+        }
         xls
     }
 
@@ -166,16 +169,16 @@ pub mod file_handler {
                             let x = entry?.path();
                             match x.is_dir() {
                                 true => {
-                                    ve.push(FileStatus::Dir { value: file_list_with(x).unwrap() });
+                                    ve.push(FileStatus::Dir { value: file_list_with(x)? });
                                 }
                                 false => { ve.push(FileStatus::File { value: x }); }
                             }
                         }
                     }
-                    false => { eprintln!("错误不是目录") }
+                    false => { return Err(ThreadEvents::UnknownError(anyhow!("错误不是目录"))); }
                 }
             }
-            Err(_) => { eprintln!("错误目录") }
+            Err(e) => { return Err(ThreadEvents::IoError(e)); }
         }
         Ok(ve)
     }

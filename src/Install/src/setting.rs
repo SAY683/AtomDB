@@ -10,7 +10,6 @@ pub const JUDGEMENT: [(&str, &str); 2] = [(INQUIRE_BUILD_DIR_DATABASE, DATABASE_
 
 pub mod database_config {
     use rbatis::{crud, impl_select};
-    use sea_orm::DeriveEntityModel;
     use sea_orm::prelude::{DateTime, Json};
     use serde::{Deserialize, Serialize};
     use uuid::Uuid;
@@ -40,7 +39,7 @@ pub mod database_config {
         pub hash: Option<String>,
     }
     crud!(DatabaseConfig{});
-    
+
     ///# 创建结构
     pub const DATABASE_BUILD_DIR: &str = r#"
     create table database

@@ -85,6 +85,9 @@ pub trait ViewDrive {
 	fn input_column(position: &str) -> std::io::Result<String> {
 		Input::new().with_prompt(position).interact()
 	}
+	fn input_column_def(position: &str,def:&str) -> std::io::Result<String> {
+		Input::new().with_prompt(position).with_initial_text(def).interact()
+	}
 }
 
 impl ViewDrive for Colour {

@@ -45,3 +45,4 @@ bevy_reflect = { version = "*", features = ["bevy_math", "documentation", "small
 indicatif = { version = "*", features = ["rayon", "improved_unicode"] }#:阶段显示>
 Static = { path = "../Static" }
 View = { path = "../View" }
+Error = { path = "../Error" }
