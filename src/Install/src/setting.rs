@@ -17,11 +17,12 @@ pub mod database_config {
     use sea_orm::prelude::{DateTime, Json};
     use serde::{Deserialize, Serialize};
     use uuid::Uuid;
+    use crate::tables::sea_orm_active_enums::Modes;
 
     pub const TYPE_EME: &str = r#"create type modes as enum ('HASH', 'MAP', 'CACHE');"#;
     ///# 创建结构
     pub const SERVICE_BUILD_DIR: &str = r#"
-create table service
+    create table service
 (
     "Uuid"        uuid not null
         constraint service_pk
@@ -66,6 +67,7 @@ create table service
         pub service_port: Option<String>,
         pub name: Option<String>,
         pub framework: Option<Json>,
+        pub mode: Option<Modes>,
     }
     crud!(Service{});
     impl_select!(Service{select_name(name:String) -> Option => "`where name = #{name}`"});

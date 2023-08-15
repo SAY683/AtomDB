@@ -12,6 +12,7 @@ use Static::alex::Overmaster;
 use Static::base::FutureEx;
 use View::{Colour, ViewDrive};
 use crate::io::file_handler::{write_dds};
+use crate::tables::sea_orm_active_enums::Modes;
 
 const HASH_DB: &str = "HASH";
 const MAP_DB: &str = "MAP";
@@ -32,6 +33,16 @@ pub enum DiskMode {
     HASH,
     MAP,
     Cache,
+}
+
+impl Into<Modes> for DiskMode {
+    fn into(self) -> Modes {
+        match self {
+            DiskMode::HASH => { Modes::Hash }
+            DiskMode::MAP => { Modes::Map }
+            DiskMode::Cache => { Modes::Cache }
+        }
+    }
 }
 
 impl From<[&'static str; 3]> for DiskMode {
@@ -134,6 +145,7 @@ pub mod file_handler {
                                     service_port: Some(sev.to_string()),
                                     name: Some(name.to_string()),
                                     framework: None,
+                                    mode: Some(modes.into()),
                                 }).await?;
                                 println!("{}", s.to_string());
                             }
