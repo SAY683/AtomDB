@@ -65,7 +65,7 @@ pub mod log {
     use View::{Colour, Information, ViewDrive};
 
     pub const OUT_LOG: &str = "事件";
-    pub const OUT_LOG_1: &str = "选择";
+    pub const OUT_LOG_1: &str = "菜单";
     pub const ORD1: &str = "写入";
     pub const ORD2: &str = "结束";
 
