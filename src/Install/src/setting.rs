@@ -1,12 +1,16 @@
 use crate::setting::{database_config::DATABASE_BUILD_DIR};
-use crate::setting::database_config::SERVICE_BUILD_DIR;
+use crate::setting::database_config::{SERVICE_BUILD_DIR, TYPE_EME};
 
 ///# 查询数据库
 const INQUIRE_BUILD_DIR_SERVER: &str = "select tablename from pg_tables where tablename ='service'";
 const INQUIRE_BUILD_DIR_DATABASE: &str = "select tablename from pg_tables where tablename='database'";
+const INQUIRE_BUILD_DIR_TYPER: &str = r#"
+select t.typname as "modes", pg_catalog.format_type(t.oid, NULL)
+from pg_type t
+where t.typname = 'modes';"#;
 
 ///# 初始数据库必修
-pub const JUDGEMENT: [(&str, &str); 2] = [(INQUIRE_BUILD_DIR_DATABASE, DATABASE_BUILD_DIR), (INQUIRE_BUILD_DIR_SERVER, SERVICE_BUILD_DIR)];
+pub const JUDGEMENT: [(&str, &str); 3] = [(INQUIRE_BUILD_DIR_DATABASE, DATABASE_BUILD_DIR), (INQUIRE_BUILD_DIR_SERVER, SERVICE_BUILD_DIR), (INQUIRE_BUILD_DIR_TYPER, TYPE_EME)];
 
 pub mod database_config {
     use rbatis::{crud, impl_select};
@@ -14,19 +18,18 @@ pub mod database_config {
     use serde::{Deserialize, Serialize};
     use uuid::Uuid;
 
+    pub const TYPE_EME: &str = r#"create type modes as enum ('HASH', 'MAP', 'CACHE');"#;
     ///# 创建结构
     pub const SERVICE_BUILD_DIR: &str = r#"
-    create table service
+create table service
 (
     "Uuid"        uuid not null
         constraint service_pk
-            primary key
-        constraint "service_database_Uuid_fk"
-            references database ("Uuid")
-            on update cascade on delete restrict,
+            primary key,
     "ServicePort" inet,
     "Name"        text,
     "Framework"   json,
+    "Mode"        modes,
     constraint service_pk2
         unique ("Name", "ServicePort")
 );
