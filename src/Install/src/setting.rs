@@ -9,7 +9,12 @@ const INQUIRE_BUILD_DIR_DATABASE: &str = "select tablename from pg_tables where 
 pub const JUDGEMENT: [(&str, &str); 2] = [(INQUIRE_BUILD_DIR_DATABASE, DATABASE_BUILD_DIR), (INQUIRE_BUILD_DIR_SERVER, SERVICE_BUILD_DIR)];
 
 pub mod database_config {
-    use rbatis::crud;
+    use rbatis::{crud, impl_select};
+    use sea_orm::DeriveEntityModel;
+    use sea_orm::prelude::{DateTime, Json};
+    use serde::{Deserialize, Serialize};
+    use uuid::Uuid;
+
     ///# 创建结构
     pub const SERVICE_BUILD_DIR: &str = r#"
     create table service
@@ -27,10 +32,15 @@ pub mod database_config {
         unique ("Name", "ServicePort")
 );
     "#;
-    crud!(crate::tables::service::Model{});
-
-    pub fn test_service_db() {}
-
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+    pub struct DatabaseConfig {
+        pub name: String,
+        pub uuid: Uuid,
+        pub time: Option<DateTime>,
+        pub hash: Option<String>,
+    }
+    crud!(DatabaseConfig{});
+    
     ///# 创建结构
     pub const DATABASE_BUILD_DIR: &str = r#"
     create table database
@@ -46,7 +56,15 @@ pub mod database_config {
         unique ("Time", "Hash")
 );
   "#;
-    crud!(crate::tables::database::Model{});
+    #[derive(Clone, Debug, PartialEq,  Eq, Serialize, Deserialize)]
+    pub struct ServiceConfig {
+        pub uuid: Uuid,
+        pub service_port: Option<String>,
+        pub name: Option<String>,
+        pub framework: Option<Json>,
+    }
+    crud!(ServiceConfig{});
+    impl_select!(ServiceConfig{select_name(name:String) -> Option => "`where name = #{name}`"});
 }
 
 pub mod local_config {

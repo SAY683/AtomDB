@@ -76,6 +76,7 @@ pub mod file_handler {
     use Static::Events;
     use View::{Colour, Information, ViewDrive};
     use crate::io::{Disk, DiskMode, DiskWrite, KVStore};
+    use crate::setting::database_config::{DatabaseConfig, ServiceConfig};
     use crate::setting::local_config::SUPER_URL;
     use crate::sql_url::OrmEX;
     use crate::tables::{database, service};
@@ -120,13 +121,13 @@ pub mod file_handler {
                         let name = name.to_string();
                         let sev = *server;
                         let mut set = SUPER_URL.deref().load().postgres.connect_bdc().await?;
-                        database::Model::insert(&mut set, &database::Model {
+                        DatabaseConfig::insert(&mut set, &DatabaseConfig {
                             name: name.to_string(),
                             uuid: Uuid::parse_str(&uuid).unwrap(),
                             time: Some(time.naive_local()),
                             hash: Some(e.to_string()),
                         }).await?;
-                        service::Model::insert(&mut set, &service::Model {
+                        ServiceConfig::insert(&mut set, &ServiceConfig {
                             uuid: Uuid::parse_str(&uuid).unwrap(),
                             service_port: Some(sev.to_string()),
                             name: Some(name.to_string()),
