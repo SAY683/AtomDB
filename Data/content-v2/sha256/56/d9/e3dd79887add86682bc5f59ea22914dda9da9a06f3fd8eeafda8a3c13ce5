@@ -1,0 +1,24 @@
+[postgres]
+name = "postgres"
+password = "683683say"
+host = "localhost"
+#port="5432"
+database = "postgres"
+[mysql]#没有完成
+name = "root"
+password = "683S@y683"
+host = "localhost"
+#port="?"
+database = "cabinet"
+[redis]#制作中
+#name=""
+#password=""
+host = ""
+#port = ""
+database = ""
+[mariadb]#没有完成
+name = "root"
+password = "683S@y683"
+host = "localhost"
+#port="?"
+database = "cabinet"

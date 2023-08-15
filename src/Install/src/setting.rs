@@ -31,14 +31,15 @@ pub mod database_config {
         unique ("Name", "ServicePort")
 );
     "#;
+
     #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
-    pub struct DatabaseConfig {
+    pub struct Database {
         pub name: String,
         pub uuid: Uuid,
         pub time: Option<DateTime>,
         pub hash: Option<String>,
     }
-    crud!(DatabaseConfig{});
+    crud!(Database{});
 
     ///# 创建结构
     pub const DATABASE_BUILD_DIR: &str = r#"
@@ -55,15 +56,16 @@ pub mod database_config {
         unique ("Time", "Hash")
 );
   "#;
-    #[derive(Clone, Debug, PartialEq,  Eq, Serialize, Deserialize)]
-    pub struct ServiceConfig {
+
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+    pub struct Service {
         pub uuid: Uuid,
         pub service_port: Option<String>,
         pub name: Option<String>,
         pub framework: Option<Json>,
     }
-    crud!(ServiceConfig{});
-    impl_select!(ServiceConfig{select_name(name:String) -> Option => "`where name = #{name}`"});
+    crud!(Service{});
+    impl_select!(Service{select_name(name:String) -> Option => "`where name = #{name}`"});
 }
 
 pub mod local_config {

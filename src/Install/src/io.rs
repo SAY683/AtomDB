@@ -77,7 +77,7 @@ pub mod file_handler {
     use Static::Events;
     use View::{Colour, Information, ViewDrive};
     use crate::io::{Disk, DiskMode, DiskWrite, KVStore};
-    use crate::setting::database_config::{DatabaseConfig, ServiceConfig};
+    use crate::setting::database_config::{Database, Service};
     use crate::setting::local_config::SUPER_URL;
     use crate::sql_url::OrmEX;
 
@@ -116,24 +116,26 @@ pub mod file_handler {
                                 }
                             }
                         } {
-                            None => { eprintln!("信息损坏") }
+                            None => { return Err(ThreadEvents::UnknownError(anyhow!("信息损坏"))); }
                             Some(e) => {
                                 let time = KVStore::<String, String>::io_time();
                                 let name = name.to_string();
                                 let sev = *server;
                                 let mut set = SUPER_URL.deref().load().postgres.connect_bdc().await?;
-                                DatabaseConfig::insert(&mut set, &DatabaseConfig {
+                                let s = Database::insert(&mut set, &Database {
                                     name: name.to_string(),
                                     uuid: Uuid::parse_str(&uuid).unwrap(),
                                     time: Some(time.naive_local()),
                                     hash: Some(e.to_string()),
                                 }).await?;
-                                ServiceConfig::insert(&mut set, &ServiceConfig {
+                                println!("{}", s.to_string());
+                                let s = Service::insert(&mut set, &Service {
                                     uuid: Uuid::parse_str(&uuid).unwrap(),
                                     service_port: Some(sev.to_string()),
                                     name: Some(name.to_string()),
                                     framework: None,
                                 }).await?;
+                                println!("{}", s.to_string());
                             }
                         }
                         if play.read().position() == 1 {

@@ -26,8 +26,19 @@ const DATA_DB: &str = "Atomic";
 const BIN: &str = "Bin";
 const SYSTEM_FILE: &str = "atom.toml";
 const SYSTEM_DIR_FILE: &str = "atomic.toml";
+
+const LOGS: &str = "Logs";
+const LOGS1: &str = "atomic.logs";
 //文件路径
 lazy_static! {
+    //log位置
+    pub static ref LOCAL_BIN_LOGS: PathBuf = {
+        let mut x = PathBuf::new();
+        x.push(LOCAL_PATH.as_ref().unwrap().as_path());
+        x.push(LOGS);
+        x.push(LOGS1);
+        x
+    };
     //设置位置
     pub static ref LOCAL_BIN_FILR: PathBuf = {
         let mut x = PathBuf::new();
