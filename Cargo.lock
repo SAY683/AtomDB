@@ -49,6 +49,7 @@ dependencies = [
  "rayon",
  "rbatis",
  "rbdc",
+ "rbdc-mysql",
  "rbdc-pg",
  "rbs",
  "sea-orm",
@@ -4320,6 +4321,35 @@ dependencies = [
  "tokio-rustls",
  "uuid",
  "webpki-roots 0.24.0",
+]
+
+[[package]]
+name = "rbdc-mysql"
+version = "4.3.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c1d72e9d9dbd8a0c38aba69cd204e73553c589d22ceb6b65c7fbd4bcbfe0752e"
+dependencies = [
+ "bitflags 2.4.0",
+ "byteorder",
+ "bytes",
+ "digest 0.10.7",
+ "either",
+ "fastdate",
+ "futures-core",
+ "futures-util",
+ "generic-array",
+ "hex",
+ "log",
+ "percent-encoding",
+ "rand 0.8.5",
+ "rbdc",
+ "rbs",
+ "rsa 0.9.2",
+ "serde",
+ "sha-1",
+ "sha2 0.10.7",
+ "smallvec",
+ "url",
 ]
 
 [[package]]

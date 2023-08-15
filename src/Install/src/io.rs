@@ -67,7 +67,6 @@ pub mod file_handler {
     use std::ops::Deref;
     use std::path::{Path, PathBuf};
     use std::sync::Arc;
-    use arc_swap::access::Access;
     use spin::RwLock;
     use tokio::io::AsyncWriteExt;
     use uuid::fmt::Urn;
@@ -120,7 +119,7 @@ pub mod file_handler {
                         let time = KVStore::<String, String>::io_time();
                         let name = name.to_string();
                         let sev = *server;
-                        let mut set = SUPER_URL.deref().load().postgres.connect().await?;
+                        let mut set = SUPER_URL.deref().load().postgres.connect_bdc().await?;
                         database::Model::insert(&mut set, &database::Model {
                             name: name.to_string(),
                             uuid: Uuid::parse_str(&uuid).unwrap(),

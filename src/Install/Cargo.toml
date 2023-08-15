@@ -26,7 +26,7 @@ cacache = { version = "*", features = ["tokio-stream", "async-std", "link_to", "
 ssri = "*"#:磁盘必须hash>
 rbatis = { version = "*", features = ["rbatis-macro-driver"] }#:ORM(A)Mysql>
 rbdc = "*"#:ORM(B)Mysql>
-#rbdc-mysql = "*"#:ORM(C)Mysql>
+rbdc-mysql = "*"#:ORM(C)Mysql>
 rbs = "*"#ORM(D)Mysql>
 rbdc-pg = "*"#:PostgreSQL(E)>
 sysinfo = "*"#:系统信息>

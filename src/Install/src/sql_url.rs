@@ -4,10 +4,10 @@ use std::ops::Deref;
 
 use deadpool_redis::{Config as Conf, Pool, Runtime};
 use rbatis::RBatis;
-use rbdc::db::{Connection as Con, Driver};
+use rbdc::db::{Connection as Con};
 use rbdc_pg::connection::PgConnection;
 use rbdc_pg::options::PgConnectOptions;
-use sea_orm::{ConnectionTrait, Database, DatabaseConnection, EntityTrait, ExecResult, QueryResult, Schema, Statement};
+use sea_orm::{ConnectionTrait, Database, DatabaseConnection, DbBackend, EntityTrait, ExecResult, QueryResult, Schema, Statement};
 use serde::{Deserialize, Serialize};
 use tokio_postgres::{Client, Config, Connection, NoTls, Socket};
 use tokio_postgres::tls::NoTlsStream;
@@ -46,7 +46,15 @@ pub trait OrmEX {
     async fn connect(&self) -> Events<DatabaseConnection> {
         Ok(Database::connect(self.url()).await?)
     }
-    async fn connect_rab(&self) -> RBatis { todo!() }
+    async fn connect_bdc(&self) -> Events<RBatis> {
+        let die = RBatis::new();
+        match self.connect().await?.get_database_backend() {
+            DbBackend::MySql => { die.link(rbdc_mysql::driver::MysqlDriver {}, self.url().as_str()).await?; }
+            DbBackend::Postgres => { die.link(rbdc_pg::driver::PgDriver {}, self.url().as_str()).await?; }
+            DbBackend::Sqlite => {}
+        }
+        Ok(die)
+    }
     async fn run_table<E>(&self, table: E) -> Events<()> where E: EntityTrait {
         let db = self.connect().await?;
         let builder = db.get_database_backend();

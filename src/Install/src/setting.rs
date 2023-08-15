@@ -10,9 +10,6 @@ pub const JUDGEMENT: [(&str, &str); 2] = [(INQUIRE_BUILD_DIR_DATABASE, DATABASE_
 
 pub mod database_config {
     use rbatis::crud;
-    use sea_orm::{IdenStatic};
-    use sea_orm::EntityTrait;
-
     ///# 创建结构
     pub const SERVICE_BUILD_DIR: &str = r#"
     create table service
