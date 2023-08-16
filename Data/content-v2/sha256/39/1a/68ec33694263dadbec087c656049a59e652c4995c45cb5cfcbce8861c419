@@ -1,0 +1,119 @@
+2023-08-15 16:10:30.970048  TRACE mio::poll - registering event source with poller: token=Token(3146102537520), interests=READABLE | WRITABLE
+2023-08-15 16:10:31.059717  TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:10:31.0608562 TRACE mio::poll - registering event source with poller: token=Token(3146102536848), interests=READABLE | WRITABLE
+2023-08-15 16:10:31.14888   TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:19:09.457693  TRACE mio::poll - registering event source with poller: token=Token(2067684781088), interests=READABLE | WRITABLE
+2023-08-15 16:19:09.5601471 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:19:09.5611299 TRACE mio::poll - registering event source with poller: token=Token(2067684781872), interests=READABLE | WRITABLE
+2023-08-15 16:19:09.6445257 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:21:01.3707736 TRACE mio::poll - registering event source with poller: token=Token(2997128727520), interests=READABLE | WRITABLE
+2023-08-15 16:21:01.4592883 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:21:01.4603644 TRACE mio::poll - registering event source with poller: token=Token(2997128727408), interests=READABLE | WRITABLE
+2023-08-15 16:21:01.5446014 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:21:51.6818744 TRACE mio::poll - registering event source with poller: token=Token(2095798227440), interests=READABLE | WRITABLE
+2023-08-15 16:21:51.7657096 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:21:51.7667547 TRACE mio::poll - registering event source with poller: token=Token(2095798228000), interests=READABLE | WRITABLE
+2023-08-15 16:21:51.8500536 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:22:07.8228334 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8230855 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8231963 TRACE async_io::driver - block_on: completed
+2023-08-15 16:22:07.8232112 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8232394 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8233688 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8233765 TRACE async_std::task::builder - spawn
+2023-08-15 16:22:07.8234175 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8234618 TRACE polling::iocp - new: handle=IoCompletionPort { handle: 00000002f4 }
+2023-08-15 16:22:07.8234654 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8235224 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8236244 TRACE async_io::driver - block_on: waiting on I/O
+2023-08-15 16:22:07.8236258 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8236263 TRACE async_std::task::builder - spawn
+2023-08-15 16:22:07.823629  TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.823634  TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8236353 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8236372 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8236436 TRACE async_io::reactor - process_timers: 0 ready wakers
+2023-08-15 16:22:07.8236522 TRACE polling - Poller::wait(_, None)
+2023-08-15 16:22:07.8236729 TRACE polling::iocp - wait: handle=IoCompletionPort { handle: 00000002f4 }, timeout=None
+2023-08-15 16:22:07.8237371 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8237491 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8237812 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8237876 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8237884 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8238142 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8238162 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.823827  TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8238509 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8239877 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8240907 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8240998 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8241384 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8241785 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8241931 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8242272 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8242356 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8243485 TRACE async_std::task::builder - spawn
+2023-08-15 16:22:07.8244651 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.8245096 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8245209 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8245346 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8245361 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.824677  TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8246959 TRACE async_io::driver - block_on()
+2023-08-15 16:22:07.82472   TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8247422 TRACE async_io::driver - main_loop: sleeping for 50 us
+2023-08-15 16:22:07.8247514 TRACE async_io::driver - main_loop: notified
+2023-08-15 16:22:07.8247531 TRACE async_io::driver - main_loop: sleeping for 50 us
+2023-08-15 16:22:07.8247563 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8248981 TRACE async_std::task::builder - spawn
+2023-08-15 16:22:07.824938  TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8249387 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8271491 TRACE async_io::driver - main_loop: sleeping for 75 us
+2023-08-15 16:22:07.8275078 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8275092 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8275548 TRACE async_std::task::builder - spawn
+2023-08-15 16:22:07.8275964 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8276043 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8284524 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8284591 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8285357 TRACE async_std::task::builder - spawn
+2023-08-15 16:22:07.8285757 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.828578  TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8287337 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8287408 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8288219 TRACE async_std::task::builder - spawn
+2023-08-15 16:22:07.8288617 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8288674 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8289351 TRACE async_std::task::builder - spawn
+2023-08-15 16:22:07.8289645 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8289645 TRACE async_io::driver - block_on: sleep until notification
+2023-08-15 16:22:07.8297457 TRACE sea_orm::database - connect;
+2023-08-15 16:22:07.829992  TRACE sea_orm::driver::sqlx_postgres - connect; options=ConnectOptions { url: "postgresql://postgres:683683say@localhost:5432/postgres", max_connections: None, min_connections: None, connect_timeout: None, idle_timeout: None, acquire_timeout: None, max_lifetime: None, sqlx_logging: true, sqlx_logging_level: Info, sqlcipher_key: None, schema_search_path: None }
+2023-08-15 16:22:07.8316911 TRACE mio::poll - registering event source with poller: token=Token(2095798804576), interests=READABLE | WRITABLE
+2023-08-15 16:22:07.8421565 TRACE async_io::driver - main_loop: sleeping for 100 us
+2023-08-15 16:22:07.8572541 TRACE async_io::driver - main_loop: sleeping for 250 us
+2023-08-15 16:22:07.8732378 TRACE async_io::driver - main_loop: sleeping for 500 us
+2023-08-15 16:22:07.8884374 TRACE async_io::driver - main_loop: sleeping for 750 us
+2023-08-15 16:22:07.9035464 TRACE async_io::driver - main_loop: sleeping for 1000 us
+2023-08-15 16:22:07.9190321 TRACE async_io::driver - main_loop: sleeping for 2500 us
+2023-08-15 16:22:07.9202979 TRACE sea_orm::driver::sqlx_postgres - -- connect;
+2023-08-15 16:22:07.9203084 TRACE sea_orm::database - -- connect;
+2023-08-15 16:22:07.9214848 TRACE mio::poll - registering event source with poller: token=Token(2095798802224), interests=READABLE | WRITABLE
+2023-08-15 16:22:07.9343502 TRACE async_io::driver - main_loop: sleeping for 5000 us
+2023-08-15 16:22:07.9502775 TRACE async_io::driver - main_loop: sleeping for 10000 us
+2023-08-15 16:22:08.0054324 INFO rbatis::plugin::intercept_log - [rbatis] [533923692040687616] exec  => `insert into database (name,uuid,time,hash) VALUES (?,?,?,?)` ["aw","1e27832f-d544-496f-98f3-b6280986f0f3","2023-08-15T08:22:07.829569200","sha256-fMMyXmaknU/Q5SW/sRinOW/WiqBARqomrIIYq5V4w4w="]
+2023-08-15 16:22:08.0134777 INFO rbatis::plugin::intercept_log - [rbatis] [533923692040687616] exec  <= db:Notice { storage: b"S\xe9\x94\x99\xe8\xaf\xaf\0VERROR\0C42703\0M\xe5\x85\xb3\xe7\xb3\xbb \"database\" \xe7\x9a\x84 \"name\" \xe5\xad\x97\xe6\xae\xb5\xe4\xb8\x8d\xe5\xad\x98\xe5\x9c\xa8\0P23\0Fparse_target.c\0L1066\0RcheckInsertTargets\0\0", severity: Error, message: (23, 67), code: (16, 21) }
+2023-08-15 16:22:08.0138733 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:22:08.0138984 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:50:10.9697285 TRACE mio::poll - registering event source with poller: token=Token(2490897145152), interests=READABLE | WRITABLE
+2023-08-15 16:50:11.0567916 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:50:11.0578801 TRACE mio::poll - registering event source with poller: token=Token(2490897145936), interests=READABLE | WRITABLE
+2023-08-15 16:50:11.1415694 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:50:11.1426451 TRACE mio::poll - registering event source with poller: token=Token(2490897146048), interests=READABLE | WRITABLE
+2023-08-15 16:50:11.2262417 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:56:09.9057795 TRACE mio::poll - registering event source with poller: token=Token(3052122416080), interests=READABLE | WRITABLE
+2023-08-15 16:56:09.9954434 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:56:09.99645   TRACE mio::poll - registering event source with poller: token=Token(3052122415520), interests=READABLE | WRITABLE
+2023-08-15 16:56:10.0834856 TRACE mio::poll - deregistering event source from poller
+2023-08-15 16:56:10.0843312 TRACE mio::poll - registering event source with poller: token=Token(3052122415632), interests=READABLE | WRITABLE
+2023-08-15 16:56:10.1730379 TRACE mio::poll - deregistering event source from poller

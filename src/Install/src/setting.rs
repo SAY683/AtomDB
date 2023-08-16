@@ -13,7 +13,7 @@ where t.typname = 'modes';"#;
 pub const JUDGEMENT: [(&str, &str); 3] = [(INQUIRE_BUILD_DIR_DATABASE, DATABASE_BUILD_DIR), (INQUIRE_BUILD_DIR_SERVER, SERVICE_BUILD_DIR), (INQUIRE_BUILD_DIR_TYPER, TYPE_EME)];
 
 pub mod database_config {
-    use rbatis::{crud, impl_select};
+    use rbatis::{crud};
     use sea_orm::prelude::{DateTime, Json};
     use serde::{Deserialize, Serialize};
     use uuid::Uuid;
@@ -70,7 +70,6 @@ pub mod database_config {
         pub mode: Option<Modes>,
     }
     crud!(Service{});
-    impl_select!(Service{select_name(name:String) -> Option => "`where name = #{name}`"});
 }
 
 pub mod local_config {

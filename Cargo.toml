@@ -40,6 +40,7 @@ sea-query = { version = "*", features = ["postgres-types", "postgres-interval", 
 serde = { version = "*", features = ["derive"] }#:数据序列>
 #serde_json = "*"#:json序列>
 #serde_json_borrow = "*"#:json>
+struson = "*"#:快捷写入>
 #serde_yaml = "*"#:yaml>
 #toml = {version = "*", features = ["indexmap"]}#:toml>
 schemars = { version = "*", features = ["url", "enumset", "arrayvec07"] }#:代码json>
@@ -78,6 +79,7 @@ intrusive-collections = "*"#:聚合表>
 #bincode = "*"#:编码转译>
 #bytes = "*"#:编码>
 ph = "*"#:hash数组>
+im = { version = "*", features = ["arbitrary", "proptest", "serde", "refpool", "rayon", "quickcheck"] }#:允许多个引用的向量>
 #data-encoding = "*"#:数据编码>
 #dataOptimization<+>dataOptimization<+>dataOptimization<+>dataOptimization<+>dataOptimization<+>
 
@@ -87,7 +89,7 @@ jni = "*"#:java交互>
 #async-stream = "*"#:异步迭代>
 #async-graphql = { version = "*", features = ["tokio", "url", "uuid", "cbor", "hashbrown", "bson"] }#:请求机>
 #libc = "*"#:c类型>
-memmap="*"#内存映射文件>
+memmap = "*"#内存映射文件>
 anyhow = "*"#:Result兼容处理>
 thiserror = "*"#:错误指定>
 fast_log = "*"#:log(B)>
