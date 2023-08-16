@@ -7,6 +7,7 @@ use cacache;
 use chrono::{DateTime, Utc};
 use futures::{AsyncReadExt, AsyncWriteExt};
 use ssri::{Algorithm, Integrity};
+use uuid::Uuid;
 use Static::{Alexia, Events, LOCAL_DB};
 use Static::alex::Overmaster;
 use Static::base::FutureEx;
@@ -90,7 +91,7 @@ pub mod file_handler {
     use crate::io::{Disk, DiskMode, DiskWrite, KVStore};
     use crate::setting::database_config::{Database, Service};
     use crate::setting::local_config::SUPER_URL;
-    use crate::sql_url::OrmEX;
+    use crate::sql_url::{OrmEX};
 
     ///正式操作
     pub fn write_dds(file: &str, modes: DiskMode) -> Vec<FutureEx<'static, Overmaster, Events<DiskWrite>>> {
@@ -114,9 +115,18 @@ pub mod file_handler {
                         let kv = i;
                         play.write().inc(1);
                         let uuid = kv.key.clone().unwrap();
+                        let kv = KVStore {
+                            hash: None,
+                            key: Some(kv.key.unwrap().to_string()),
+                            value: kv.value,
+                        };
                         match match modes {
-                            DiskMode::HASH => { Some(kv.hash_write().await) }
-                            DiskMode::MAP => { Some(kv.write_buf().await) }
+                            DiskMode::HASH => {
+                                Some(kv.hash_write().await)
+                            }
+                            DiskMode::MAP => {
+                                Some(kv.write_buf().await)
+                            }
                             DiskMode::Cache => {
                                 match kv.link().await {
                                     Ok(e) => { Some(e) }
@@ -132,22 +142,21 @@ pub mod file_handler {
                                 let time = KVStore::<String, String>::io_time();
                                 let name = name.to_string();
                                 let sev = *server;
+                                //let mut set = PostgresUlr::default().connect_bdc().await?;
                                 let mut set = SUPER_URL.deref().load().postgres.connect_bdc().await?;
-                                let s = Database::insert(&mut set, &Database {
+                                Database::insert(&mut set, &Database {
                                     name: name.to_string(),
-                                    uuid: Uuid::parse_str(&uuid).unwrap(),
+                                    uuid: uuid.clone(),
+                                    hash: e.to_string(),
                                     time: Some(time.naive_local()),
-                                    hash: Some(e.to_string()),
                                 }).await?;
-                                println!("{}", s.to_string());
-                                let s = Service::insert(&mut set, &Service {
-                                    uuid: Uuid::parse_str(&uuid).unwrap(),
-                                    service_port: Some(sev.to_string()),
-                                    name: Some(name.to_string()),
-                                    framework: None,
-                                    mode: Some(modes.into()),
+                                Service::insert(&mut set, &Service {
+                                    uuid,
+                                    name,
+                                    port: sev.to_string(),
+                                    frame: None,
+                                    mode: modes.into(),
                                 }).await?;
-                                println!("{}", s.to_string());
                             }
                         }
                         if play.read().position() == 1 {
@@ -197,7 +206,7 @@ pub mod file_handler {
         Ok(ve)
     }
 
-    fn bit(e: FileStatus) -> Vec<KVStore<String, PathBuf>> {
+    fn bit(e: FileStatus) -> Vec<KVStore<Uuid, PathBuf>> {
         let mut x = vec![];
         match e {
             FileStatus::Dir { value } => {
@@ -207,13 +216,13 @@ pub mod file_handler {
                 });
             }
             FileStatus::File { value } => {
-                x.push(KVStore { hash: None, key: Some(Urn::from_uuid(Uuid::new_v4()).to_string()), value });
+                x.push(KVStore { hash: None, key: Some(Urn::from_uuid(Uuid::new_v4()).into_uuid()), value });
             }
         }
         x
     }
 
-    pub fn kv_store<P: AsRef<Path>>(ts: P) -> Events<Vec<KVStore<String, PathBuf>>> {
+    pub fn kv_store<P: AsRef<Path>>(ts: P) -> Events<Vec<KVStore<Uuid, PathBuf>>> {
         let mls = file_list_with(ts)?;
         let mut x = vec![];
         mls.into_iter().for_each(|e| {
@@ -224,7 +233,7 @@ pub mod file_handler {
     }
 
     ///# 写入
-    pub fn kv_as_disk_modes<P: AsRef<Path>>(ts: P) -> Events<Vec<KVStore<String, Vec<u8>>>> {
+    pub fn kv_as_disk_modes<P: AsRef<Path>>(ts: P) -> Events<Vec<KVStore<Uuid, Vec<u8>>>> {
         let mut x = vec![];
         kv_store(ts)?.into_iter().for_each(|e| {
             x.push(KVStore::from((e.key.unwrap(), e.value)))
@@ -267,6 +276,29 @@ impl From<(String, PathBuf)> for KVStore<String, Vec<u8>> {
             hash: None,
             key: Some(value.0),
             value: xx,
+        }
+    }
+}
+
+impl From<(Uuid, PathBuf)> for KVStore<Uuid, Vec<u8>> {
+    fn from(value: (Uuid, PathBuf)) -> Self {
+        let mut xx = vec![];
+        let mut mlx = BufReader::new(File::open(value.1).unwrap());
+        mlx.read_to_end(&mut xx).unwrap();
+        KVStore {
+            hash: None,
+            key: Some(value.0),
+            value: xx,
+        }
+    }
+}
+
+impl From<KVStore<Uuid, Vec<u8>>> for KVStore<String, Vec<u8>> {
+    fn from(value: KVStore<Uuid, Vec<u8>>) -> Self {
+        KVStore {
+            hash: None,
+            key: Some(value.key.unwrap().to_string()),
+            value: value.value,
         }
     }
 }
