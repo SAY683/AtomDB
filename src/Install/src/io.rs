@@ -281,6 +281,7 @@ impl From<(String, PathBuf)> for KVStore<String, Vec<u8>> {
 }
 
 impl From<(Uuid, PathBuf)> for KVStore<Uuid, Vec<u8>> {
+    #[deny(useless_deprecated)]
     fn from(value: (Uuid, PathBuf)) -> Self {
         let mut xx = vec![];
         let mut mlx = BufReader::new(File::open(value.1).unwrap());
