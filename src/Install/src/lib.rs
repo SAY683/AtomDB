@@ -9,12 +9,12 @@ use std::path::PathBuf;
 
 use anyhow::Result;
 use lazy_static::lazy_static;
+use crate::setting::local_config::SUPER_DLR_URL;
 
 pub mod system;
 pub mod io;
 pub mod setting;
 pub mod sql_url;
-pub mod tables;
 
 
 ///# 发布
@@ -29,8 +29,16 @@ const SYSTEM_DIR_FILE: &str = "atomic.toml";
 
 const LOGS: &str = "Logs";
 const LOGS1: &str = "atomic.logs";
+
 //文件路径
 lazy_static! {
+    ///APL
+    pub static ref LOCAL_BIN_APL: PathBuf = {
+        let mut x = PathBuf::new();
+        x.push(LOCAL_PATH.as_ref().unwrap().as_path());
+        x.push(SUPER_DLR_URL.load().apl.as_path());
+        x
+    };
     //log位置
     pub static ref LOCAL_BIN_LOGS: PathBuf = {
         let mut x = PathBuf::new();

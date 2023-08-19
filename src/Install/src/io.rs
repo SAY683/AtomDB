@@ -4,16 +4,16 @@ use std::io::{BufReader, Read};
 use std::path::{Path, PathBuf};
 use bevy_reflect::Reflect;
 use cacache;
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, NaiveDateTime, Utc};
 use futures::{AsyncReadExt, AsyncWriteExt};
 use ssri::{Algorithm, Integrity};
-use uuid::Uuid;
+use uuid::{Uuid};
 use Static::{Alexia, Events, LOCAL_DB};
 use Static::alex::Overmaster;
 use Static::base::FutureEx;
 use View::{Colour, ViewDrive};
 use crate::io::file_handler::{write_dds};
-use crate::tables::sea_orm_active_enums::Modes;
+use crate::setting::database_config::Modes;
 
 const HASH_DB: &str = "HASH";
 const MAP_DB: &str = "MAP";
@@ -80,6 +80,7 @@ pub mod file_handler {
     use std::path::{Path, PathBuf};
     use std::sync::Arc;
     use anyhow::anyhow;
+    use serde_json::json;
     use spin::RwLock;
     use uuid::fmt::Urn;
     use uuid::Uuid;
@@ -89,8 +90,9 @@ pub mod file_handler {
     use Static::Events;
     use View::{Colour, Information, ViewDrive};
     use crate::io::{Disk, DiskMode, DiskWrite, KVStore};
+    use crate::LOCAL_BIN_APL;
     use crate::setting::database_config::{Database, Service};
-    use crate::setting::local_config::SUPER_URL;
+    use crate::setting::local_config::{SUPER_DLR_URL, SUPER_URL};
     use crate::sql_url::{OrmEX};
 
     ///正式操作
@@ -144,21 +146,31 @@ pub mod file_handler {
                                 let sev = *server;
                                 //let mut set = PostgresUlr::default().connect_bdc().await?;
                                 let mut set = SUPER_URL.deref().load().postgres.connect_bdc().await?;
-                                Database::insert(&mut set, &Database {
+                                let se = Database::insert(&mut set, &Database {
                                     name: name.to_string(),
                                     uuid: uuid.clone(),
                                     hash: e.to_string(),
                                     time: Some(time.naive_local()),
                                 }).await?;
-                                Service::insert(&mut set, &Service {
+                                let se1 = Service::insert(&mut set, &Service {
                                     uuid,
                                     name,
                                     port: sev.to_string(),
-                                    frame: None,
+                                    logs: Some(fs::read_to_string(LOCAL_BIN_APL.as_path())?),
                                     mode: modes.into(),
                                 }).await?;
+                                if let true = SUPER_DLR_URL.load().view {
+                                    println!("{}", Colour::Monitoring.table(Information {
+                                        list: vec!["数据库", "结果"],
+                                        data: vec![
+                                            vec!["database", json!(se).as_str().unwrap_or("Error")],
+                                            vec!["database", json!(se1).as_str().unwrap_or("Error")],
+                                        ],
+                                    }));
+                                }
                             }
                         }
+                        //显示
                         if play.read().position() == 1 {
                             play.read().finish();
                         };
@@ -346,6 +358,10 @@ pub trait Disk {
     ///# 时间
     fn io_time() -> DateTime<Utc> {
         Utc::now()
+    }
+    fn io_timestamp() -> NaiveDateTime {
+        let x = KVStore::<String, String>::io_time();
+        sea_orm::prelude::DateTime::new(x.date_naive(), x.time())
     }
 }
 

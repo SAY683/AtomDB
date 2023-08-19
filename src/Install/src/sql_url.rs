@@ -7,7 +7,8 @@ use rbatis::RBatis;
 use rbdc::db::{Connection as Con};
 use rbdc_pg::connection::PgConnection;
 use rbdc_pg::options::PgConnectOptions;
-use sea_orm::{ConnectionTrait, Database, DatabaseConnection, DbBackend, EntityTrait, ExecResult, QueryResult, Schema, Statement};
+use rbs::Value;
+use sea_orm::{ConnectionTrait, Database, DatabaseConnection, DbBackend, ExecResult, QueryResult, Statement};
 use serde::{Deserialize, Serialize};
 use tokio_postgres::{Client, Config, Connection, NoTls, Socket};
 use tokio_postgres::tls::NoTlsStream;
@@ -54,14 +55,6 @@ pub trait OrmEX {
             DbBackend::Sqlite => {}
         }
         Ok(die)
-    }
-    async fn run_table<E>(&self, table: E) -> Events<()> where E: EntityTrait {
-        let db = self.connect().await?;
-        let builder = db.get_database_backend();
-        let schema = Schema::new(builder);
-        builder.build(&schema.create_table_from_entity(table));
-        db.close().await?;
-        Ok(())
     }
     ///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     ///# 运行语句
@@ -189,6 +182,19 @@ pub struct PostgresUlr {
     pub port: Option<String>,
     pub host: String,
     pub database: String,
+}
+
+impl PostgresUlr {
+    ///# 执行
+    pub async fn connect_rab_execute_some(&self, sql: &str, e: Option<Vec<Value>>) -> Events<rbdc::db::ExecResult> {
+        let mut x = self.connect_rab().await?;
+        let xa = match e {
+            None => { x.exec(sql, vec![]).await? }
+            Some(e) => { x.exec(sql, e).await? }
+        };
+        x.close().await?;
+        Ok(xa)
+    }
 }
 
 impl PostgresUlr {
