@@ -1,30 +1,21 @@
 use crate::setting::{database_config::DATABASE_BUILD_DIR};
+use crate::setting::database_config::{SERVICE_BUILD_DIR};
 
-///# 查询数据库[冻结]
-// const INQUIRE_BUILD_DIR_SERVER: &str = r#"
-// select tablename from pg_tables where tablename ='service'"#;
+///# 查询数据库
+const INQUIRE_BUILD_DIR_SERVER: &str = r#"
+select tablename from pg_tables where tablename ='service'"#;
 const INQUIRE_BUILD_DIR_DATABASE: &str = r#"
 select tablename from pg_tables where tablename='database'"#;
 // const INQUIRE_BUILD_DIR_TYPER: &str = r#"
 // select typname
 // from pg_type
 // where typname = 'modes'"#;
-// const INQUIRE_BUILD_DIR_TYPER2: &str = r#"
-// select typname
-// from pg_type
-// where typname = 'key_value'"#;
-// const INQUIRE_BUILD_DIR_TYPER3: &str = r#"
-// select typname
-// from pg_type
-// where typname = 'modes_table';"#;
 
 ///# 初始数据库必修
-pub const JUDGEMENT: [(&str, &str); 1] = [
+pub const JUDGEMENT: [(&str, &str); 2] = [
     // (INQUIRE_BUILD_DIR_TYPER, TYPE_EME),
-    // (INQUIRE_BUILD_DIR_TYPER2, TYPE_EME2),
-    // (INQUIRE_BUILD_DIR_TYPER3, TYPE_EME3)
     (INQUIRE_BUILD_DIR_DATABASE, DATABASE_BUILD_DIR),
-    //(INQUIRE_BUILD_DIR_SERVER, SERVICE_BUILD_DIR),
+    (INQUIRE_BUILD_DIR_SERVER, SERVICE_BUILD_DIR),
 ];
 
 pub mod database_config {
@@ -32,19 +23,7 @@ pub mod database_config {
     use serde::{Deserialize, Serialize};
 
     pub const TYPE_EME: &str = r#"
-    create type modes as enum ('HASH', 'MAP', 'CACHE');"#;
-    pub const TYPE_EME2: &str = r#"
-    create type key_value as
-(
-    name text,
-    hash text
-);"#;
-    pub const TYPE_EME3: &str = r#"
-    create type modes_table as
-(
-    name text,
-    mode modes
-);"#;
+    create type modes as enum ('Hash', 'Map', 'Cache');"#;
 
     pub const DATABASE_BUILD_DIR: &str = r#"
     create table database
@@ -58,21 +37,18 @@ pub mod database_config {
     constraint database_pk2
         unique (name, hash, port)
 );"#;
-    ///# 创建结构 [冻结]
+    ///# 创建结构
     pub const SERVICE_BUILD_DIR: &str = r#"
     create table service
 (
-    uuid text  not null
+    uuid text not null
         constraint service_pk
             primary key
         constraint service_database_uuid_fk
             references database,
-    name text  not null,
-    port character  not null,
-    logs xml,
-    mode text not null,
-    constraint service_pk2
-        unique (name, port)
+    name text not null,
+    logs text,
+    mode text not null
 );"#;
 
     #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -83,6 +59,15 @@ pub mod database_config {
         pub port: String,
     }
     crud!(Database{});
+
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+    pub struct Service {
+        pub uuid: String,
+        pub name: String,
+        pub logs: Option<String>,
+        pub mode: String,
+    }
+    crud!(Service{});
 
     ///# 创建结构
     #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]

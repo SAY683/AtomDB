@@ -6,6 +6,7 @@ use bevy_reflect::Reflect;
 use cacache;
 use chrono::{DateTime, NaiveDateTime, Utc};
 use futures::{AsyncReadExt, AsyncWriteExt};
+use serde::{Deserialize, Serialize};
 use ssri::{Algorithm, Integrity};
 use uuid::{Uuid};
 use Static::{Alexia, Events, LOCAL_DB};
@@ -28,18 +29,18 @@ impl Alexia<DiskWrite> for DiskWrite {
     }
 }
 
-#[derive(Copy, Clone, Debug, Reflect)]
+#[derive(Copy, Eq, Clone, PartialEq, Debug, Reflect, Serialize, Deserialize)]
 pub enum DiskMode {
-    HASH,
-    MAP,
+    Hash,
+    Map,
     Cache,
 }
 
 impl Into<String> for DiskMode {
     fn into(self) -> String {
         match self {
-            DiskMode::HASH => { "HASH_Mode".to_string() }
-            DiskMode::MAP => { "MAP_Mode".to_string() }
+            DiskMode::Hash => { "HASH_Mode".to_string() }
+            DiskMode::Map => { "MAP_Mode".to_string() }
             DiskMode::Cache => { "CACHE_Mode".to_string() }
         }
     }
@@ -48,8 +49,8 @@ impl Into<String> for DiskMode {
 impl From<String> for DiskMode {
     fn from(value: String) -> Self {
         match value.as_str() {
-            "HASH_Mode" => { DiskMode::HASH }
-            "HAP_Mode" => { DiskMode::MAP }
+            "HASH_Mode" => { DiskMode::Hash }
+            "HAP_Mode" => { DiskMode::Map }
             "CACHE_Mode" => { DiskMode::Cache }
             _ => { panic!("NoToken") }
         }
@@ -60,15 +61,15 @@ impl From<[&'static str; 3]> for DiskMode {
     fn from(value: [&'static str; 3]) -> Self {
         match Colour::select_func_column(&value, "选择模式").unwrap() {
             0 => {
-                DiskMode::HASH
+                DiskMode::Hash
             }
             1 => {
-                DiskMode::MAP
+                DiskMode::Map
             }
             2 => {
                 DiskMode::Cache
             }
-            _ => { DiskMode::MAP }
+            _ => { DiskMode::Map }
         }
     }
 }
@@ -76,8 +77,8 @@ impl From<[&'static str; 3]> for DiskMode {
 impl Display for DiskMode {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            DiskMode::HASH => { write!(f, "{}", HASH_DB) }
-            DiskMode::MAP => { write!(f, "{}", MAP_DB) }
+            DiskMode::Hash => { write!(f, "{}", HASH_DB) }
+            DiskMode::Map => { write!(f, "{}", MAP_DB) }
             DiskMode::Cache => { write!(f, "{}", CACHE_DB) }
         }
     }
@@ -100,7 +101,8 @@ pub mod file_handler {
     use Static::Events;
     use View::{Colour, Information, ViewDrive};
     use crate::io::{Disk, DiskMode, DiskWrite, KVStore};
-    use crate::setting::database_config::{Database};
+    use crate::LOCAL_BIN_APL;
+    use crate::setting::database_config::{Database, Service};
     use crate::setting::local_config::{SUPER_DLR_URL, SUPER_URL};
     use crate::sql_url::{OrmEX};
 
@@ -122,6 +124,7 @@ pub mod file_handler {
                     let play = play.clone();
                     let name = name.clone();
                     let server = server.clone();
+                    let file=Arc::new(fs::read_to_string(LOCAL_BIN_APL.as_path()).unwrap());
                     xls.push(FutureEx::AsyncTraitSimple(Box::pin(async move {
                         let kv = i;
                         play.write().inc(1);
@@ -132,10 +135,10 @@ pub mod file_handler {
                             value: kv.value,
                         };
                         match match modes {
-                            DiskMode::HASH => {
+                            DiskMode::Hash => {
                                 Some(kv.hash_write().await)
                             }
-                            DiskMode::MAP => {
+                            DiskMode::Map => {
                                 Some(kv.write_buf().await)
                             }
                             DiskMode::Cache => {
@@ -160,19 +163,18 @@ pub mod file_handler {
                                     hash: e.to_string(),
                                     port: server.to_string(),
                                 }).await?;
-                                // let se1 = Service::insert(&mut set, &Service {
-                                //     uuid: uuid.to_string(),
-                                //     name,
-                                //     port: sev.to_string(),
-                                //     logs: Some(fs::read_to_string(LOCAL_BIN_APL.as_path())?),
-                                //     mode: modes.into(),
-                                // }).await?;
+                                let se1 = Service::insert(&mut set, &Service {
+                                    uuid: uuid.to_string(),
+                                    name: name.to_string(),
+                                    logs: Some(file.to_string()),
+                                    mode: modes.into(),
+                                }).await?;
                                 if let true = SUPER_DLR_URL.load().view {
                                     println!("{}", Colour::Monitoring.table(Information {
                                         list: vec!["数据库", "结果"],
                                         data: vec![
                                             vec!["database", json!(se).as_str().unwrap_or("Error")],
-                                            // vec!["database", json!(se1).as_str().unwrap_or("Error")],
+                                            vec!["database", json!(se1).as_str().unwrap_or("Error")],
                                         ],
                                     }));
                                 }

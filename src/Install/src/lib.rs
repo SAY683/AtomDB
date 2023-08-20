@@ -18,7 +18,7 @@ pub mod sql_url;
 
 
 ///# 发布
-pub const NTS: bool = true;
+pub const NTS: bool = false;
 ///# 文件
 const DATA: &str = "Data";
 const DATA_DB: &str = "Atomic";
@@ -36,6 +36,7 @@ lazy_static! {
     pub static ref LOCAL_BIN_APL: PathBuf = {
         let mut x = PathBuf::new();
         x.push(LOCAL_PATH.as_ref().unwrap().as_path());
+        x.push(BIN);
         x.push(SUPER_DLR_URL.load().apl.as_path());
         x
     };
