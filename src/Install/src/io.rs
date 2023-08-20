@@ -13,7 +13,6 @@ use Static::alex::Overmaster;
 use Static::base::FutureEx;
 use View::{Colour, ViewDrive};
 use crate::io::file_handler::{write_dds};
-use crate::setting::database_config::Modes;
 
 const HASH_DB: &str = "HASH";
 const MAP_DB: &str = "MAP";
@@ -36,12 +35,23 @@ pub enum DiskMode {
     Cache,
 }
 
-impl Into<Modes> for DiskMode {
-    fn into(self) -> Modes {
+impl Into<String> for DiskMode {
+    fn into(self) -> String {
         match self {
-            DiskMode::HASH => { Modes::Hash }
-            DiskMode::MAP => { Modes::Map }
-            DiskMode::Cache => { Modes::Cache }
+            DiskMode::HASH => { "HASH_Mode".to_string() }
+            DiskMode::MAP => { "MAP_Mode".to_string() }
+            DiskMode::Cache => { "CACHE_Mode".to_string() }
+        }
+    }
+}
+
+impl From<String> for DiskMode {
+    fn from(value: String) -> Self {
+        match value.as_str() {
+            "HASH_Mode" => { DiskMode::HASH }
+            "HAP_Mode" => { DiskMode::MAP }
+            "CACHE_Mode" => { DiskMode::Cache }
+            _ => { panic!("NoToken") }
         }
     }
 }
@@ -90,8 +100,7 @@ pub mod file_handler {
     use Static::Events;
     use View::{Colour, Information, ViewDrive};
     use crate::io::{Disk, DiskMode, DiskWrite, KVStore};
-    use crate::LOCAL_BIN_APL;
-    use crate::setting::database_config::{Database, Service};
+    use crate::setting::database_config::{Database};
     use crate::setting::local_config::{SUPER_DLR_URL, SUPER_URL};
     use crate::sql_url::{OrmEX};
 
@@ -141,30 +150,29 @@ pub mod file_handler {
                         } {
                             None => { return Err(ThreadEvents::UnknownError(anyhow!("信息损坏"))); }
                             Some(e) => {
-                                let time = KVStore::<String, String>::io_time();
                                 let name = name.to_string();
-                                let sev = *server;
+                                let _sev = *server;
                                 //let mut set = PostgresUlr::default().connect_bdc().await?;
                                 let mut set = SUPER_URL.deref().load().postgres.connect_bdc().await?;
                                 let se = Database::insert(&mut set, &Database {
                                     name: name.to_string(),
-                                    uuid: uuid.clone(),
+                                    uuid: uuid.to_string(),
                                     hash: e.to_string(),
-                                    time: Some(time.naive_local()),
+                                    port: server.to_string(),
                                 }).await?;
-                                let se1 = Service::insert(&mut set, &Service {
-                                    uuid,
-                                    name,
-                                    port: sev.to_string(),
-                                    logs: Some(fs::read_to_string(LOCAL_BIN_APL.as_path())?),
-                                    mode: modes.into(),
-                                }).await?;
+                                // let se1 = Service::insert(&mut set, &Service {
+                                //     uuid: uuid.to_string(),
+                                //     name,
+                                //     port: sev.to_string(),
+                                //     logs: Some(fs::read_to_string(LOCAL_BIN_APL.as_path())?),
+                                //     mode: modes.into(),
+                                // }).await?;
                                 if let true = SUPER_DLR_URL.load().view {
                                     println!("{}", Colour::Monitoring.table(Information {
                                         list: vec!["数据库", "结果"],
                                         data: vec![
                                             vec!["database", json!(se).as_str().unwrap_or("Error")],
-                                            vec!["database", json!(se1).as_str().unwrap_or("Error")],
+                                            // vec!["database", json!(se1).as_str().unwrap_or("Error")],
                                         ],
                                     }));
                                 }

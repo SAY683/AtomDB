@@ -18,7 +18,7 @@ pub mod sql_url;
 
 
 ///# 发布
-pub const NTS: bool = false;
+pub const NTS: bool = true;
 ///# 文件
 const DATA: &str = "Data";
 const DATA_DB: &str = "Atomic";

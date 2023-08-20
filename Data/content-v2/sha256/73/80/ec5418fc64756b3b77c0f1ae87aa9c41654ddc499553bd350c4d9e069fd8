@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<data>
-  <object-set>
-    <database path="postgres">
-      <view name="test_db" query="select * from database where CASE name;"/>
-    </database>
-  </object-set>
-</data>

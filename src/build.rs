@@ -1,14 +1,17 @@
 use std::ops::Deref;
 use anyhow::anyhow;
+use fast_log::Config;
 use Error::ThreadEvents;
 use Install::io::DiskWrite;
-use Install::setting::local_config::{SUPER_URL};
+use Install::LOCAL_BIN_LOGS;
+use Install::setting::local_config::{SUPER_DLR_URL, SUPER_URL};
 use Static::{Alexia, Events};
 use View::{Colour, Information, ViewDrive};
 use crate::build::log::{log_info, ORD1, ORD2, OUT_LOG, OUT_LOG_1};
 use crate::test::test_get_db;
 
 pub async fn init() -> Events<()> {
+    log()?;
     if db_build().await? {
         log_info();
         'life: loop {
@@ -29,6 +32,13 @@ pub async fn init() -> Events<()> {
         }
     } else {
         return Err(ThreadEvents::UnknownError(anyhow!("安全退出")));
+    }
+    Ok(())
+}
+
+fn log() -> Events<()> {
+    if let true = SUPER_DLR_URL.deref().load().view {
+        fast_log::init(Config::new().file(LOCAL_BIN_LOGS.as_path().to_str().unwrap()).console())?;
     }
     Ok(())
 }
