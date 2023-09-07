@@ -161,7 +161,6 @@ dependencies = [
  "tarpc",
  "thiserror",
  "tokio",
- "tokio-graceful",
  "uuid",
 ]
 
@@ -6101,18 +6100,6 @@ dependencies = [
  "socket2 0.5.3",
  "tokio-macros",
  "windows-sys 0.48.0",
-]
-
-[[package]]
-name = "tokio-graceful"
-version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1611140d93f7b8fcbdeffb5b4bc2fd7131d2876f1b485f2ad00725d588d8c8b8"
-dependencies = [
- "pin-project-lite",
- "slab",
- "tokio",
- "tracing",
 ]
 
 [[package]]

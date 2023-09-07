@@ -1,23 +1,56 @@
 use std::ops::Deref;
 use anyhow::anyhow;
+use bevy_reflect::Reflect;
 use fast_log::Config;
 use Error::ThreadEvents;
 use Install::io::DiskWrite;
 use Install::LOCAL_BIN_LOGS;
 use Install::setting::local_config::{SUPER_DLR_URL, SUPER_URL};
 use Static::{Alexia, Events};
+use Static::alex::Overmaster;
+use Static::base::FutureEx;
 use View::{Colour, Information, ViewDrive};
 use crate::build::log::{log_info, ORD1, ORD2, OUT_LOG, OUT_LOG_1};
 use crate::test::test_get_db;
 
-pub async fn init() -> Events<()> {
-    log()?;
+#[derive(Copy, Clone, Reflect, Debug)]
+pub struct Burden;
+
+impl Alexia<Burden> for Burden {
+    fn event() -> Vec<FutureEx<'static, Overmaster, Events<Burden>>> {
+        vec![
+            //初始化
+            FutureEx::AsyncFnTraitSimple(Box::new(|e| Box::pin(async move {
+                init(e).await?;
+                Ok(Burden)
+            }))),
+            //网络统计
+            FutureEx::AsyncFnTraitSimple(Box::new(|e| Box::pin(async {
+                view(e).await?;
+                Ok(Burden)
+            })))]
+    }
+}
+
+pub async fn view(mut e: Overmaster) -> Events<()> {
+    Ok(())
+}
+
+pub async fn init(mut e: Overmaster) -> Events<()> {
+    if let true = SUPER_DLR_URL.deref().load().view {
+        fast_log::init(Config::new().file(LOCAL_BIN_LOGS.as_path().to_str().unwrap()).console())?;
+    }
     if db_build().await? {
         log_info();
         'life: loop {
             let index = vec![ORD1, ORD2];
             match index[Colour::select_func_column(&index, OUT_LOG_1).unwrap()] {
                 ORD1 => {
+                    ///控制通知
+                    if let Overmaster::Subject(ref mut e) = e {
+                        *e.deref().0.lock() = true;
+                        e.1.notify_all();
+                    }
                     //写入
                     DiskWrite::run(DiskWrite::aggregation()).await?;
                 }
@@ -32,13 +65,6 @@ pub async fn init() -> Events<()> {
         }
     } else {
         return Err(ThreadEvents::UnknownError(anyhow!("安全退出")));
-    }
-    Ok(())
-}
-
-fn log() -> Events<()> {
-    if let true = SUPER_DLR_URL.deref().load().view {
-        fast_log::init(Config::new().file(LOCAL_BIN_LOGS.as_path().to_str().unwrap()).console())?;
     }
     Ok(())
 }

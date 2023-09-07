@@ -1,6 +1,5 @@
 #![feature(trivial_bounds)]
 #![feature(core_intrinsics)]
-#![feature(provide_any)]
 #![feature(maybe_uninit_array_assume_init)]
 #![feature(maybe_uninit_uninit_array)]
 #![feature(box_into_inner)]
