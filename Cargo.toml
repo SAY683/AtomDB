@@ -14,6 +14,7 @@ maintenance = { status = "InTheOptimization" }
 [dependencies]
 #async<+>async<+>async<+>async<+>async<+>async<+>async<+>async<+>async<+>
 tokio = { version = "*", features = ["full"] }#:全域执行async/await>
+tokio-graceful = "*"#:async/await控制级>
 futures = "*"#:区域执行async/await>
 async-trait = "*"#:async-trait>[1.68<=版本使用]
 flume = { version = "*", features = ["async"] }#:std.mpsc替代>
