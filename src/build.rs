@@ -1,7 +1,7 @@
 use std::ops::Deref;
 use anyhow::anyhow;
 use bevy_reflect::Reflect;
-use fast_log::Config;
+use fast_log::{Config};
 use Error::ThreadEvents;
 use Install::io::DiskWrite;
 use Install::LOCAL_BIN_LOGS;
@@ -10,7 +10,7 @@ use Static::{Alexia, Events};
 use Static::alex::Overmaster;
 use Static::base::FutureEx;
 use View::{Colour, Information, ViewDrive};
-use crate::build::log::{log_info, ORD1, ORD2, OUT_LOG, OUT_LOG_1};
+use crate::build::log::{log_info, ORD1, ORD2, ORD3, OUT_LOG, OUT_LOG_1};
 use crate::test::test_get_db;
 
 #[derive(Copy, Clone, Reflect, Debug)]
@@ -32,27 +32,43 @@ impl Alexia<Burden> for Burden {
     }
 }
 
+///# 网页
 pub async fn view(mut e: Overmaster) -> Events<()> {
+    if let Overmaster::Subject(ref mut e) = e {
+        e.1.wait(&mut e.0.lock());
+        let xx = format!("http:{}{}", SUPER_DLR_URL.load().port, SUPER_DLR_URL.load().path);
+        println!("{}\r\n", &xx);
+        if SUPER_DLR_URL.load().auto {
+            match opener::open(xx) {
+                Ok(_) => {}
+                Err(_) => { eprintln!("错误"); }
+            }
+        }
+    }
     Ok(())
 }
 
+///# 内核
 pub async fn init(mut e: Overmaster) -> Events<()> {
+    //日志设置
     if let true = SUPER_DLR_URL.deref().load().view {
         fast_log::init(Config::new().file(LOCAL_BIN_LOGS.as_path().to_str().unwrap()).console())?;
     }
     if db_build().await? {
         log_info();
         'life: loop {
-            let index = vec![ORD1, ORD2];
+            let index = vec![ORD1, ORD3, ORD2];
             match index[Colour::select_func_column(&index, OUT_LOG_1).unwrap()] {
                 ORD1 => {
-                    ///控制通知
+                    //写入
+                    DiskWrite::run(DiskWrite::aggregation()).await?;
+                }
+                ORD3 => {
+                    //控制通知
                     if let Overmaster::Subject(ref mut e) = e {
                         *e.deref().0.lock() = true;
                         e.1.notify_all();
                     }
-                    //写入
-                    DiskWrite::run(DiskWrite::aggregation()).await?;
                 }
                 ORD2 => {
                     //结束
@@ -104,6 +120,7 @@ pub mod log {
     pub const OUT_LOG_1: &str = "菜单";
     pub const ORD1: &str = "写入";
     pub const ORD2: &str = "结束";
+    pub const ORD3: &str = "网页";
 
     ///# 开始显示
     pub fn log_info() {

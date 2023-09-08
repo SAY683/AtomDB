@@ -4,3 +4,7 @@ port = "127.0.0.1:8964"
 view = true
 #通用apl设置（规定在bin目录下）
 apl = "Atom.xml"
+#网页路径
+path = "/atomic"
+#自动默认
+auto = true

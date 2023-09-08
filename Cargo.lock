@@ -147,6 +147,7 @@ dependencies = [
  "memmap",
  "once_cell",
  "opendal",
+ "opener",
  "parking_lot 0.12.1",
  "ph",
  "quinn",

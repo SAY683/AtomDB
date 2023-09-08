@@ -111,6 +111,8 @@ pub mod local_config {
         pub port: SocketAddr,
         pub view: bool,
         pub apl: PathBuf,
+        pub path: String,
+        pub auto: bool,
     }
 
     impl InstallUtils for LocalConfigToml {}

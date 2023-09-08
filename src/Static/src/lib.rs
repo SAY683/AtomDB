@@ -40,6 +40,7 @@ pub mod alex;
 pub mod base;
 pub mod function_frame;
 pub mod ssh;
+pub mod web;
 
 ///# 控制
 ///# Arc<(Mutex<bool>, Condvar)>
