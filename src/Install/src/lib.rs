@@ -27,11 +27,23 @@ const BIN: &str = "Bin";
 const SYSTEM_FILE: &str = "atom.toml";
 const SYSTEM_DIR_FILE: &str = "atomic.toml";
 
+const HTML_WEB: &str = "Html";
+const HTML_INDEX: &str = "index.html";
+
 const LOGS: &str = "Logs";
 const LOGS1: &str = "atomic.logs";
 
 //文件路径
 lazy_static! {
+     ///主网页
+     pub static ref LOCAL_BIN_WEB: PathBuf = {
+        let mut x = PathBuf::new();
+        x.push(LOCAL_PATH.as_ref().unwrap().as_path());
+        x.push(BIN);
+        x.push(HTML_WEB);
+        x.push(HTML_INDEX);
+        x
+    };
     ///APL
     pub static ref LOCAL_BIN_APL: PathBuf = {
         let mut x = PathBuf::new();
