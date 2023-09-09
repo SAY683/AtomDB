@@ -6,6 +6,7 @@ use Error::ThreadEvents;
 use Install::io::DiskWrite;
 use Install::LOCAL_BIN_LOGS;
 use Install::setting::local_config::{SUPER_DLR_URL, SUPER_URL};
+use Install::web::web;
 use Static::{Alexia, Events};
 use Static::alex::Overmaster;
 use Static::base::FutureEx;
@@ -36,6 +37,7 @@ impl Alexia<Burden> for Burden {
 pub async fn view(mut e: Overmaster) -> Events<()> {
     if let Overmaster::Subject(ref mut e) = e {
         e.1.wait(&mut e.0.lock());
+         web().await?.await?;
     }
     Ok(())
 }

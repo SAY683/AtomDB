@@ -1,5 +1,6 @@
 #![feature(async_fn_in_trait)]
 #![feature(associated_type_defaults)]
+#![feature(decl_macro)]
 
 extern crate core;
 
