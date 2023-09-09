@@ -43,6 +43,16 @@ rayon = "*"#:并行>
 chrono = "*"#:Mysql|时间>
 bevy_reflect = { version = "*", features = ["bevy_math", "documentation", "smallvec", "glam"] }#:反射>
 indicatif = { version = "*", features = ["rayon", "improved_unicode"] }#:阶段显示>
+opener = "*"#:默认开启>
 Static = { path = "../Static" }
 View = { path = "../View" }
 Error = { path = "../Error" }
+#Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>
+actix-cors = "*"#:Web性能A>
+actix-web = { version = "*", features = ["secure-cookies", "actix-web-codegen"] }#:Web性能B>
+actix-rt = { version = "*", features = ["actix-macros", "tokio-uring"] }#:Web性能C>
+#rocket = "*"#:Web安全>
+tower = { version = "*", features = ["full"] }#:Web构建>
+jsonwebtoken = "*"#:json验证>
+#warp = {version = "*", features = ["websocket","tokio-tungstenite"]}#:https构建
+#Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>

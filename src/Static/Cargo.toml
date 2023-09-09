@@ -110,14 +110,4 @@ quinn = "*"#:QUIC>
 #native-tls = { version = "*", features = ["alpn", "vendored"] }#:tls网络>
 #pyo3 = {version ="*",features = ["extension-module"] }#:python交互>
 #network<+>network<+>network<+>network<+>network<+>network<+>network<+>network<+>network<+>
-
-#Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>
-#actix-cors = "*"#:Web性能A>
-#actix-web = { version = "*", features = ["secure-cookies", "actix-web-codegen"] }#:Web性能B>
-#actix-rt = { version = "*", features = ["actix-macros", "tokio-uring"] }#:Web性能C>
-#rocket = "*"#:Web安全>
-#tower = { version = "*", features = ["full"] }#:Web构建>
-#jsonwebtoken = "*"#:json验证>
-#warp = {version = "*", features = ["websocket","tokio-tungstenite"]}#:https构建
-#Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>
 Error = { path = "../Error" }

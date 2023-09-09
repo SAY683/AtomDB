@@ -15,6 +15,7 @@ pub mod system;
 pub mod io;
 pub mod setting;
 pub mod sql_url;
+pub mod web;
 
 
 ///# 发布

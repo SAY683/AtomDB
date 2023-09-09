@@ -33,6 +33,9 @@ dependencies = [
  "Error",
  "Static",
  "View",
+ "actix-cors",
+ "actix-rt",
+ "actix-web",
  "anyhow",
  "arc-swap",
  "async-trait",
@@ -44,9 +47,11 @@ dependencies = [
  "futures",
  "hashbrown 0.14.0",
  "indicatif",
+ "jsonwebtoken",
  "lazy_static",
  "memmap",
  "once_cell",
+ "opener",
  "quick-xml 0.30.0",
  "rayon",
  "rbatis",
@@ -67,6 +72,7 @@ dependencies = [
  "tokio",
  "tokio-postgres",
  "toml 0.7.6",
+ "tower",
  "uuid",
 ]
 
@@ -2629,6 +2635,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e8094feaf31ff591f651a2664fb9cfd92bba7a60ce3197265e9482ebe753c8f7"
 dependencies = [
  "hashbrown 0.14.0",
+]
+
+[[package]]
+name = "hdrhistogram"
+version = "7.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f19b9f54f7c7f55e31401bb647626ce0cf0f67b0004982ce815b3ee72a02aa8"
+dependencies = [
+ "byteorder",
+ "num-traits",
 ]
 
 [[package]]
@@ -6270,6 +6286,33 @@ dependencies = [
  "toml_datetime",
  "winnow",
 ]
+
+[[package]]
+name = "tower"
+version = "0.4.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b8fa9be0de6cf49e536ce1851f987bd21a43b771b09473c3549a6c853db37c1c"
+dependencies = [
+ "futures-core",
+ "futures-util",
+ "hdrhistogram",
+ "indexmap 1.9.3",
+ "pin-project",
+ "pin-project-lite",
+ "rand 0.8.5",
+ "slab",
+ "tokio",
+ "tokio-util",
+ "tower-layer",
+ "tower-service",
+ "tracing",
+]
+
+[[package]]
+name = "tower-layer"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c20c8dbed6283a09604c3e69b4b7eeb54e298b8a600d4d5ecb5ad39de609f1d0"
 
 [[package]]
 name = "tower-service"

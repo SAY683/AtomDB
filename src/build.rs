@@ -10,7 +10,7 @@ use Static::{Alexia, Events};
 use Static::alex::Overmaster;
 use Static::base::FutureEx;
 use View::{Colour, Information, ViewDrive};
-use crate::build::log::{log_info, ORD1, ORD2, ORD3, OUT_LOG, OUT_LOG_1};
+use crate::build::log::{log_info, log_info_stop, ORD1, ORD2, ORD3, OUT_LOG, OUT_LOG_1};
 use crate::test::test_get_db;
 
 #[derive(Copy, Clone, Reflect, Debug)]
@@ -24,7 +24,7 @@ impl Alexia<Burden> for Burden {
                 init(e).await?;
                 Ok(Burden)
             }))),
-            //网络统计
+            //网页统计
             FutureEx::AsyncFnTraitSimple(Box::new(|e| Box::pin(async {
                 view(e).await?;
                 Ok(Burden)
@@ -36,14 +36,6 @@ impl Alexia<Burden> for Burden {
 pub async fn view(mut e: Overmaster) -> Events<()> {
     if let Overmaster::Subject(ref mut e) = e {
         e.1.wait(&mut e.0.lock());
-        let xx = format!("http:{}{}", SUPER_DLR_URL.load().port, SUPER_DLR_URL.load().path);
-        println!("{}\r\n", &xx);
-        if SUPER_DLR_URL.load().auto {
-            match opener::open(xx) {
-                Ok(_) => {}
-                Err(_) => { eprintln!("错误"); }
-            }
-        }
     }
     Ok(())
 }
@@ -56,22 +48,29 @@ pub async fn init(mut e: Overmaster) -> Events<()> {
     }
     if db_build().await? {
         log_info();
+        //控制通知
+        if let Overmaster::Subject(ref mut e) = e {
+            *e.deref().0.lock() = true;
+            e.1.notify_all();
+        }
         'life: loop {
             let index = vec![ORD1, ORD3, ORD2];
             match index[Colour::select_func_column(&index, OUT_LOG_1).unwrap()] {
                 ORD1 => {
                     //写入
-                    DiskWrite::run(DiskWrite::aggregation()).await?;
+                    DiskWrite::alliance(DiskWrite::aggregation()).await?;
                 }
                 ORD3 => {
-                    //控制通知
-                    if let Overmaster::Subject(ref mut e) = e {
-                        *e.deref().0.lock() = true;
-                        e.1.notify_all();
+                    let xx = format!("http:{}{}", SUPER_DLR_URL.load().port, SUPER_DLR_URL.load().path);
+                    if SUPER_DLR_URL.load().auto {
+                        opener::open(xx).unwrap_or_else(|e| {
+                            eprintln!("{}", e);
+                        });
                     }
                 }
                 ORD2 => {
                     //结束
+                    log_info_stop();
                     break 'life;
                 }
                 e => {
