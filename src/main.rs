@@ -1,8 +1,6 @@
 pub mod test;
 mod build;
 
-use arc_swap::ArcSwap;
-use once_cell::sync::Lazy;
 pub use rayon::prelude::*;
 use tokio::main;
 use Static::{Alexia, Events};
@@ -15,7 +13,3 @@ pub async fn main() -> Events<()> {
     Burden::run(Burden::aggregation()).await?;
     Ok(())
 }
-
-pub static WEB_BUILD: Lazy<ArcSwap<bool>> = Lazy::new(|| {
-    ArcSwap::from_pointee(false)
-});

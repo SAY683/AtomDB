@@ -38,7 +38,6 @@ pub async fn view(mut e: Overmaster) -> Events<()> {
     if let Overmaster::Subject(ref mut e) = e {
         e.1.wait(&mut e.0.lock());
         web().await?.await?;
-        //  Websocket::run(Websocket::aggregation()).await?;
     }
     Ok(())
 }

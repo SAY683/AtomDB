@@ -1,5 +1,3 @@
-use rbatis::crud;
-use serde::{Deserialize, Serialize};
 use crate::setting::{database_config::DATABASE_BUILD_DIR};
 use crate::setting::database_config::{SERVICE_BUILD_DIR};
 
@@ -70,6 +68,7 @@ pub mod database_config {
         pub logs: Option<String>,
         pub mode: String,
     }
+    impl_select!(Service{select_id(id:&str) => "where uuid = #{id}"});
 
     impl Default for Service {
         fn default() -> Self {
