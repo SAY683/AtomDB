@@ -13,6 +13,7 @@ use Static::base::FutureEx;
 use View::{Colour, Information, ViewDrive};
 use crate::build::log::{log_info, log_info_stop, ORD1, ORD2, ORD3, OUT_LOG, OUT_LOG_1};
 use crate::test::test_get_db;
+use Install::rei::build_redis;
 
 #[derive(Copy, Clone, Reflect, Debug)]
 pub struct Burden;
@@ -51,6 +52,7 @@ pub async fn view(mut e: Overmaster) -> Events<()> {
 pub async fn cache(mut e: Overmaster) -> Events<()> {
     if let Overmaster::Subject(ref mut e) = e {
         e.1.wait(&mut e.0.lock());
+        build_redis().await?;
     }
     Ok(())
 }

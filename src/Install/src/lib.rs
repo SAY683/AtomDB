@@ -17,7 +17,7 @@ pub mod io;
 pub mod setting;
 pub mod sql_url;
 pub mod web;
-mod rei;
+pub mod rei;
 
 
 ///# 发布
