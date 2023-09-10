@@ -59,7 +59,7 @@ pub mod database_config {
         pub port: String,
     }
     crud!(Database{});
-    impl_select!(Database{select_id(id:&str) => "where uuid = #{id}"});
+    impl_select!(Database{select_id(uuid:&str) => "where uuid = #{uuid}"});
 
     #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Service {
@@ -68,7 +68,7 @@ pub mod database_config {
         pub logs: Option<String>,
         pub mode: String,
     }
-    impl_select!(Service{select_id(id:&str) => "where uuid = #{id}"});
+    impl_select!(Service{select_id(uuid:&str) => "where name = #{uuid}"});
 
     impl Default for Service {
         fn default() -> Self {
@@ -127,6 +127,7 @@ pub mod local_config {
         pub apl: PathBuf,
         pub path: String,
         pub auto: bool,
+        pub time: usize,
     }
 
     impl InstallUtils for LocalConfigToml {}

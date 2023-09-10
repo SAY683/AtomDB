@@ -2,6 +2,7 @@ use std::ops::Deref;
 use anyhow::anyhow;
 use bevy_reflect::Reflect;
 use fast_log::{Config};
+use ftlog::{LevelFilter};
 use Error::ThreadEvents;
 use Install::io::DiskWrite;
 use Install::LOCAL_BIN_LOGS;
@@ -11,7 +12,7 @@ use Static::{Alexia, Events};
 use Static::alex::Overmaster;
 use Static::base::FutureEx;
 use View::{Colour, Information, ViewDrive};
-use crate::build::log::{log_info, log_info_stop, ORD1, ORD2, ORD3, OUT_LOG, OUT_LOG_1};
+use crate::build::log::{log_info, log_info_stop, ORD1, ORD2, ORD3, ORD4, OUT_LOG, OUT_LOG_1};
 use crate::test::test_get_db;
 use Install::rei::build_redis;
 
@@ -61,7 +62,7 @@ pub async fn cache(mut e: Overmaster) -> Events<()> {
 pub async fn init(mut e: Overmaster) -> Events<()> {
     //日志设置
     if let true = SUPER_DLR_URL.deref().load().view {
-        fast_log::init(Config::new().file(LOCAL_BIN_LOGS.as_path().to_str().unwrap()).console())?;
+        fast_log::init(Config::new().level(LevelFilter::Debug).file(LOCAL_BIN_LOGS.as_path().to_str().unwrap()).console())?;
     }
     if db_build().await? {
         log_info();
@@ -71,7 +72,7 @@ pub async fn init(mut e: Overmaster) -> Events<()> {
             e.1.notify_all();
         }
         'life: loop {
-            let index = vec![ORD1, ORD3, ORD2];
+            let index = vec![ORD1, ORD3, ORD4, ORD2];
             match index[Colour::select_func_column(&index, OUT_LOG_1).unwrap()] {
                 ORD1 => {
                     //写入
@@ -84,6 +85,9 @@ pub async fn init(mut e: Overmaster) -> Events<()> {
                             eprintln!("{}", e);
                         });
                     }
+                }
+                ORD4 => {
+                    build_redis().await?;
                 }
                 ORD2 => {
                     //结束
@@ -137,6 +141,7 @@ pub mod log {
     pub const ORD1: &str = "写入";
     pub const ORD2: &str = "结束";
     pub const ORD3: &str = "网页";
+    pub const ORD4: &str = "缓存";
 
     ///# 开始显示
     pub fn log_info() {
@@ -145,6 +150,6 @@ pub mod log {
 
     ///# 结束显示
     pub fn log_info_stop() {
-        println!("{}", Colour::Monitoring.table(Information { list: vec!["AtomicDB".to_string()], data: vec![vec![format!("事务结束")]] }))
+        println!("{}", Colour::Monitoring.table(Information { list: vec!["AtomicDB".to_string(), "说明".to_string()], data: vec![vec![format!("事务结束"), format!("请输入 [Ctrl-C] 结束网页进程")]] }))
     }
 }

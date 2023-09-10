@@ -43,7 +43,9 @@ async fn index() -> impl Responder {
     let xe = Database::select_all(&mut eg).await.unwrap();
     let mut med: Vec<MysqlESR> = vec![];
     for e in xe.into_iter() {
-        let ra = Service::select_id(&mut eg, &e.uuid).await?.into_par_iter().find_any(|x| { &x.uuid == &e.uuid }).unwrap_or(Service::default());
+        let ra = Service::select_all(&mut eg).await.unwrap_or(vec![Service::default()]).into_par_iter().find_any(|x| {
+            x.uuid == e.uuid
+        }).unwrap_or(Service::default());
         med.push(MysqlESR {
             name: e.name,
             port: format!("{}/{}", e.port, ra.name),
