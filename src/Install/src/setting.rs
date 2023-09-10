@@ -1,3 +1,5 @@
+use rbatis::crud;
+use serde::{Deserialize, Serialize};
 use crate::setting::{database_config::DATABASE_BUILD_DIR};
 use crate::setting::database_config::{SERVICE_BUILD_DIR};
 
@@ -19,7 +21,7 @@ pub const JUDGEMENT: [(&str, &str); 2] = [
 ];
 
 pub mod database_config {
-    use rbatis::{crud};
+    use rbatis::{crud, impl_select};
     use serde::{Deserialize, Serialize};
 
     pub const TYPE_EME: &str = r#"
@@ -51,7 +53,7 @@ pub mod database_config {
     mode text not null
 );"#;
 
-    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+    #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Default)]
     pub struct Database {
         pub uuid: String,
         pub name: String,
@@ -59,6 +61,7 @@ pub mod database_config {
         pub port: String,
     }
     crud!(Database{});
+    impl_select!(Database{select_id(id:&str) => "where uuid = #{id}"});
 
     #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Service {
@@ -67,6 +70,18 @@ pub mod database_config {
         pub logs: Option<String>,
         pub mode: String,
     }
+
+    impl Default for Service {
+        fn default() -> Self {
+            Service {
+                uuid: "Null".to_string(),
+                name: "Null".to_string(),
+                logs: None,
+                mode: "Null".to_string(),
+            }
+        }
+    }
+
     crud!(Service{});
 
     ///# 创建结构

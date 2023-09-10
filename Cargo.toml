@@ -129,6 +129,7 @@ actix-rt = { version = "*", features = ["actix-macros", "tokio-uring"] }#:Web性
 #tower = { version = "*", features = ["full"] }#:Web构建>
 #jsonwebtoken = "*"#:json验证>
 #warp = {version = "*", features = ["websocket","tokio-tungstenite"]}#:https构建
+askama = "*"#:html>
 #Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>
 
 #NativeLibrary<+>NativeLibrary<+>NativeLibrary<+>NativeLibrary<+>NativeLibrary<+>NativeLibrary<+>
