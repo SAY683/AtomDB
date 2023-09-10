@@ -29,6 +29,11 @@ impl Alexia<Burden> for Burden {
             FutureEx::AsyncFnTraitSimple(Box::new(|e| Box::pin(async {
                 view(e).await?;
                 Ok(Burden)
+            }))),
+            //后端负载
+            FutureEx::AsyncFnTraitSimple(Box::new(|e| Box::pin(async {
+                cache(e).await?;
+                Ok(Burden)
             })))]
     }
 }
@@ -38,6 +43,14 @@ pub async fn view(mut e: Overmaster) -> Events<()> {
     if let Overmaster::Subject(ref mut e) = e {
         e.1.wait(&mut e.0.lock());
         web().await?.await?;
+    }
+    Ok(())
+}
+
+///# redis 下载服务
+pub async fn cache(mut e: Overmaster) -> Events<()> {
+    if let Overmaster::Subject(ref mut e) = e {
+        e.1.wait(&mut e.0.lock());
     }
     Ok(())
 }

@@ -1,6 +1,7 @@
 use actix_web::{App, HttpResponse, HttpServer, Responder, web};
 use actix_web::dev::Server;
 use bevy_reflect::Reflect;
+use rayon::prelude::*;
 use serde::{Deserialize, Serialize};
 use Static::{Alexia, Events};
 use Static::alex::Overmaster;
@@ -40,15 +41,14 @@ struct MysqlESR {
 async fn index() -> impl Responder {
     let mut eg = SUPER_URL.load().postgres.connect_bdc().await.unwrap();
     let xe = Database::select_all(&mut eg).await.unwrap();
-    let xr = Service::select_all(&mut eg).await.unwrap();
     let mut med: Vec<MysqlESR> = vec![];
-    xe.into_iter().for_each(|e| {
-        let r = xr.clone().into_iter().find(|x| { &x.uuid == &e.uuid }).unwrap_or(Service::default());
+    for e in xe.into_iter() {
+        let ra = Service::select_id(&mut eg, &e.uuid).await?.into_par_iter().find_any(|x| { &x.uuid == &e.uuid }).unwrap_or(Service::default());
         med.push(MysqlESR {
             name: e.name,
-            port: format!("{}/{}", e.port, r.name),
-            logs: r.logs,
+            port: format!("{}/{}", e.port, ra.name),
+            logs: ra.logs,
         })
-    });
+    }
     HttpResponse::Ok().json(med)
 }

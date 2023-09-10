@@ -13,7 +13,7 @@ database = "cabinet"
 [redis]#制作中
 #name=""
 #password=""
-host = ""
+host = "localhost"
 #port = ""
 database = ""
 [mariadb]#没有完成

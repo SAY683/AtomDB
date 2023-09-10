@@ -11,6 +11,7 @@ futures = "*"#:区域执行async/await>
 async-trait = "*"#:async-trait>[1.68<=版本使用]
 lazy_static = "*"#:惰性初始>
 once_cell = "*"#:|Cell模式全局数据>
+itertools = "*"#:迭代器>
 stretto = { version = "*", features = ["full"] }#:缓存>
 spin = "*"#:|自旋锁>
 arc-swap = "*"#:原子锁>
@@ -55,5 +56,5 @@ actix-rt = { version = "*", features = ["actix-macros", "tokio-uring"] }#:Web性
 tower = { version = "*", features = ["full"] }#:Web构建>
 jsonwebtoken = "*"#:json验证>
 #warp = {version = "*", features = ["websocket","tokio-tungstenite"]}#:https构建
-askama = "*"#:html>
+#askama = "*"#:html>
 #Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>Web<+>
