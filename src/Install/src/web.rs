@@ -1,12 +1,14 @@
+use std::ops::Deref;
 use actix_web::{App, HttpResponse, HttpServer, Responder, web};
 use actix_web::dev::Server;
 use bevy_reflect::Reflect;
-use rayon::prelude::*;
+use redis::Commands;
 use serde::{Deserialize, Serialize};
 use Static::{Alexia, Events};
 use Static::alex::Overmaster;
 use Static::base::FutureEx;
-use crate::setting::database_config::{Database, Service};
+use crate::rei::Response;
+use crate::setting::database_config::{Database};
 use crate::setting::local_config::{SUPER_DLR_URL, SUPER_URL};
 use crate::sql_url::OrmEX;
 
@@ -41,16 +43,11 @@ struct MysqlESR {
 async fn index() -> impl Responder {
     let mut eg = SUPER_URL.load().postgres.connect_bdc().await.unwrap();
     let xe = Database::select_all(&mut eg).await.unwrap();
-    let mut med: Vec<MysqlESR> = vec![];
+    let mut med = vec![];
+    let mut nc = SUPER_URL.deref().load().redis.redis_connection_async().await.unwrap();
     for e in xe.into_iter() {
-        let ra = Service::select_all(&mut eg).await.unwrap_or(vec![Service::default()]).into_par_iter().find_any(|x| {
-            x.uuid == e.uuid
-        }).unwrap_or(Service::default());
-        med.push(MysqlESR {
-            name: e.name,
-            port: format!("{}/{}", e.port, ra.name),
-            logs: ra.logs,
-        })
+        let xx = nc.get::<_, String>(e.uuid).unwrap();
+        med.push(serde_json::from_str::<Response>(xx.as_str()).unwrap())
     }
     HttpResponse::Ok().json(med)
 }

@@ -24,6 +24,8 @@ pub enum ThreadEvents {
     RedisPoolError(#[from] deadpool_redis::PoolError),
     #[error("RedisBuildError{0:#?}")]
     RedisBuildError(#[from] deadpool_redis::BuildError),
+    #[error("RedisError{0:#?}")]
+    RedisError(#[from] redis::RedisError),
     //mysql错误
     #[error("SqlxError{0:#?}")]
     SqlxError(#[from] sqlx::Error),

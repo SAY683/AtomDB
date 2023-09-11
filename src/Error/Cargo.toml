@@ -17,4 +17,5 @@ sea-orm = { version = "*", features = ["runtime-tokio", "uuid", "macros", "postg
 sqlx = { version = "*", features = ["all-databases", "all-types", "runtime-actix", "macros"] }#:sqlx>
 deadpool-redis = { version = "*", features = ["serde"] }#:Redis链接>
 rbdc = "*"#:ORM(B)Mysql>
+redis = { version = "*", features = ["tokio"] }#:Redis链接通用>
 fast_log = "*"#:log(B)>

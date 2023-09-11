@@ -9,5 +9,5 @@ path = "/atomic"
 #path = "/"
 #自动默认
 auto = true
-#服务缓存时间
+#服务缓存时间 如果==0则长期存储
 time = 60

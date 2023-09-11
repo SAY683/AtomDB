@@ -16,14 +16,20 @@ pub async fn build_redis() -> Events<()> {
     let xd = SUPER_URL.deref().load().redis.redis_pool().await?;
     let mut cmd = xd.get().await?;
     for i in xe {
-        let xv = Service::select_all(&mut eg).await?.into_par_iter().find_any(|ie| {
+        let xv = Service::select_id(&mut eg, &i.uuid).await?.into_par_iter().find_any(|ie| {
             ie.uuid == i.uuid
         }).unwrap_or(Service::default());
-        cmd.set_ex::<_, _, bool>(i.uuid, serde_json::to_string(&Response {
-            name: xv.name,
+        let bir = serde_json::to_string(&Response {
+            name: xv.name.to_string(),
             hash: i.hash,
+            port: format!("{}/{}", i.port, xv.name),
             mode: xv.mode,
-        }).unwrap(), time.clone()).await.unwrap();
+        }).unwrap();
+        if time == 0 {
+            cmd.set_ex::<_, _, bool>(i.uuid, bir, time.clone()).await.unwrap();
+        } else {
+            cmd.set::<_, _, bool>(i.uuid, bir).await.unwrap();
+        }
     }
     Ok(())
 }
@@ -32,7 +38,19 @@ pub async fn build_redis() -> Events<()> {
 pub struct Response {
     pub name: String,
     pub hash: String,
+    pub port: String,
     pub mode: String,
+}
+
+impl Default for Response {
+    fn default() -> Self {
+        Response {
+            name: "?".to_string(),
+            hash: "?".to_string(),
+            port: "?".to_string(),
+            mode: "?".to_string(),
+        }
+    }
 }
 
 impl InstallUtils for Response {}

@@ -74,6 +74,9 @@ pub trait OrmEX {
     async fn redis_connection(&self) -> Conf {
         Conf::from_url(self.url())
     }
+    async fn redis_connection_async(&self) -> Events<redis::Client> {
+        Ok(redis::Client::open(self.url())?)
+    }
     async fn redis_pool(&self) -> Events<Pool> {
         Ok(self.redis_connection().await.create_pool(Some(Runtime::Tokio1))?)
     }
