@@ -53,6 +53,7 @@ Error = { path = "../Error" }
 actix-cors = "*"#:Web性能A>
 actix-web = { version = "*", features = ["secure-cookies", "actix-web-codegen"] }#:Web性能B>
 actix-rt = { version = "*", features = ["actix-macros", "tokio-uring"] }#:Web性能C>
+actix-files = { version = "*", features = ["actix-server"] }#:Web功能D>
 #rocket = "*"#:Web安全>
 tower = { version = "*", features = ["full"] }#:Web构建>
 jsonwebtoken = "*"#:json验证>

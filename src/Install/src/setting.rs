@@ -60,6 +60,7 @@ pub mod database_config {
     }
     crud!(Database{});
     impl_select!(Database{select_id(uuid:&str) => "`where uuid = #{id}`"});
+    impl_select!(Database{select_name(name:&str) => "`where name = #{id}`"});
 
     #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
     pub struct Service {

@@ -15,7 +15,7 @@ database = "cabinet"
 #password=""
 host = "localhost"
 #port = ""
-database = ""
+database = "atomic"
 [mariadb]#没有完成
 name = "root"
 password = "683S@y683"

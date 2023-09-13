@@ -730,3 +730,106 @@
 2023-09-11 16:02:42.4013928 INFO actix_server::worker - shutting down idle worker
 2023-09-11 16:02:42.4015392 INFO actix_server::worker - shutting down idle worker
 2023-09-11 16:02:42.4019866 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:24.3459035 INFO rbatis::plugin::intercept_log - [rbatis] [543708232946814976] query => `select * from database ` []
+2023-09-11 16:22:24.3468761 INFO rbatis::plugin::intercept_log - [rbatis] [543708232946814976] query <= len=3,rows=[{"port":"127.0.0.1:1212","hash":"sha256-ZboDAqgy9v7OWbO9ECpoY90z8w9XbpOzgAmMnentGt0=","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"},{"port":"127.0.0.1:1212","hash":"sha256-lrHng4d/3GK7MBZPHX90EIDR553LZB0UV8Uk6q1S1PA=","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"},{"port":"127.0.0.1:1212","hash":"sha256-Uk/kUrXMTZ6NG2GfvXg9kNXZpvFg84KV+Kk9JSR6amY=","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:22:24.346964  INFO rbatis::plugin::intercept_log - [rbatis] [543708232951009281] query => `select * from database ` []
+2023-09-11 16:22:24.3472691 INFO actix_server::builder - starting 16 workers
+2023-09-11 16:22:24.347357  INFO actix_server::server - Tokio runtime found; starting in existing Tokio runtime
+2023-09-11 16:22:24.3478418 INFO rbatis::plugin::intercept_log - [rbatis] [543708232951009281] query <= len=3,rows=[{"port":"127.0.0.1:1212","hash":"sha256-ZboDAqgy9v7OWbO9ECpoY90z8w9XbpOzgAmMnentGt0=","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"},{"port":"127.0.0.1:1212","hash":"sha256-lrHng4d/3GK7MBZPHX90EIDR553LZB0UV8Uk6q1S1PA=","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"},{"port":"127.0.0.1:1212","hash":"sha256-Uk/kUrXMTZ6NG2GfvXg9kNXZpvFg84KV+Kk9JSR6amY=","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:22:24.3490737 INFO rbatis::plugin::intercept_log - [rbatis] [543708232963592194] query => `select * from service where uuid = ?` ["6899e135-1ee5-4d2c-8576-f0694e748057"]
+2023-09-11 16:22:24.3501871 INFO rbatis::plugin::intercept_log - [rbatis] [543708232963592194] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"}]
+2023-09-11 16:22:24.3513732 INFO rbatis::plugin::intercept_log - [rbatis] [543708232971980803] query => `select * from service where uuid = ?` ["60ce3d9c-8f48-4310-ba02-6787e9a10d90"]
+2023-09-11 16:22:24.3515731 INFO rbatis::plugin::intercept_log - [rbatis] [543708232971980803] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"}]
+2023-09-11 16:22:24.3518411 INFO rbatis::plugin::intercept_log - [rbatis] [543708232971980804] query => `select * from service where uuid = ?` ["35e10b73-aed3-40f8-ab87-1dc39a587982"]
+2023-09-11 16:22:24.3520191 INFO rbatis::plugin::intercept_log - [rbatis] [543708232971980804] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:22:27.3143845 INFO rbatis::plugin::intercept_log - [rbatis] [543708245399703557] query => `select * from database ` []
+2023-09-11 16:22:27.3153128 INFO rbatis::plugin::intercept_log - [rbatis] [543708245399703557] query <= len=3,rows=[{"port":"127.0.0.1:1212","hash":"sha256-ZboDAqgy9v7OWbO9ECpoY90z8w9XbpOzgAmMnentGt0=","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"},{"port":"127.0.0.1:1212","hash":"sha256-lrHng4d/3GK7MBZPHX90EIDR553LZB0UV8Uk6q1S1PA=","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"},{"port":"127.0.0.1:1212","hash":"sha256-Uk/kUrXMTZ6NG2GfvXg9kNXZpvFg84KV+Kk9JSR6amY=","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:22:36.8675486 INFO actix_server::server - SIGINT received; starting forced shutdown
+2023-09-11 16:22:36.8676387 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8676387 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8676639 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8676645 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.867667  INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8676682 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8676774 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8676774 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8676865 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8676862 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8677123 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8677153 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8677165 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8677169 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.867714  DEBUG actix_server::accept - paused accepting connections on 127.0.0.1:8964
+2023-09-11 16:22:36.8677214 INFO actix_server::accept - accept thread stopped
+2023-09-11 16:22:36.8677598 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:22:36.8677909 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:12.1529122 INFO rbatis::plugin::intercept_log - [rbatis] [543709188438626304] query => `select * from database ` []
+2023-09-11 16:26:12.1538553 INFO rbatis::plugin::intercept_log - [rbatis] [543709188442820609] query => `select * from database ` []
+2023-09-11 16:26:12.1540304 INFO rbatis::plugin::intercept_log - [rbatis] [543709188438626304] query <= len=3,rows=[{"port":"127.0.0.1:1212","hash":"sha256-ZboDAqgy9v7OWbO9ECpoY90z8w9XbpOzgAmMnentGt0=","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"},{"port":"127.0.0.1:1212","hash":"sha256-lrHng4d/3GK7MBZPHX90EIDR553LZB0UV8Uk6q1S1PA=","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"},{"port":"127.0.0.1:1212","hash":"sha256-Uk/kUrXMTZ6NG2GfvXg9kNXZpvFg84KV+Kk9JSR6amY=","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:26:12.154585  INFO actix_server::builder - starting 16 workers
+2023-09-11 16:26:12.1546188 INFO rbatis::plugin::intercept_log - [rbatis] [543709188442820609] query <= len=3,rows=[{"port":"127.0.0.1:1212","hash":"sha256-ZboDAqgy9v7OWbO9ECpoY90z8w9XbpOzgAmMnentGt0=","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"},{"port":"127.0.0.1:1212","hash":"sha256-lrHng4d/3GK7MBZPHX90EIDR553LZB0UV8Uk6q1S1PA=","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"},{"port":"127.0.0.1:1212","hash":"sha256-Uk/kUrXMTZ6NG2GfvXg9kNXZpvFg84KV+Kk9JSR6amY=","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:26:12.1546708 INFO actix_server::server - Tokio runtime found; starting in existing Tokio runtime
+2023-09-11 16:26:12.1559475 INFO rbatis::plugin::intercept_log - [rbatis] [543709188451209218] query => `select * from service where uuid = ?` ["6899e135-1ee5-4d2c-8576-f0694e748057"]
+2023-09-11 16:26:12.1573881 INFO rbatis::plugin::intercept_log - [rbatis] [543709188451209218] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"}]
+2023-09-11 16:26:12.1583461 INFO rbatis::plugin::intercept_log - [rbatis] [543709188463792131] query => `select * from service where uuid = ?` ["60ce3d9c-8f48-4310-ba02-6787e9a10d90"]
+2023-09-11 16:26:12.1585435 INFO rbatis::plugin::intercept_log - [rbatis] [543709188463792131] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"}]
+2023-09-11 16:26:12.1587997 INFO rbatis::plugin::intercept_log - [rbatis] [543709188463792132] query => `select * from service where uuid = ?` ["35e10b73-aed3-40f8-ab87-1dc39a587982"]
+2023-09-11 16:26:12.1589856 INFO rbatis::plugin::intercept_log - [rbatis] [543709188463792132] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:26:14.2508286 INFO rbatis::plugin::intercept_log - [rbatis] [543709197238276101] query => `select * from database ` []
+2023-09-11 16:26:14.2522212 INFO rbatis::plugin::intercept_log - [rbatis] [543709197238276101] query <= len=3,rows=[{"port":"127.0.0.1:1212","hash":"sha256-ZboDAqgy9v7OWbO9ECpoY90z8w9XbpOzgAmMnentGt0=","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"},{"port":"127.0.0.1:1212","hash":"sha256-lrHng4d/3GK7MBZPHX90EIDR553LZB0UV8Uk6q1S1PA=","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"},{"port":"127.0.0.1:1212","hash":"sha256-Uk/kUrXMTZ6NG2GfvXg9kNXZpvFg84KV+Kk9JSR6amY=","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:26:23.371276  INFO actix_server::server - SIGINT received; starting forced shutdown
+2023-09-11 16:26:23.3714117 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.371416  INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3714176 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3714233 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3714255 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3714339 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3714409 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.371436  DEBUG actix_server::accept - paused accepting connections on 127.0.0.1:1212
+2023-09-11 16:26:23.371443  INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.371443  INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3714531 DEBUG actix_server::accept - paused accepting connections on 127.0.0.1:1212
+2023-09-11 16:26:23.3714609 DEBUG actix_server::accept - paused accepting connections on 127.0.0.1:1212
+2023-09-11 16:26:23.3714685 DEBUG actix_server::accept - paused accepting connections on 127.0.0.1:8964
+2023-09-11 16:26:23.3714722 INFO actix_server::accept - accept thread stopped
+2023-09-11 16:26:23.3714874 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3715095 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.371537  INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3715409 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3715821 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3715902 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:26:23.3715988 INFO actix_server::worker - shutting down idle worker
+2023-09-11 16:31:21.4768969 INFO rbatis::plugin::intercept_log - [rbatis] [543710485837516800] query => `select * from database ` []
+2023-09-11 16:31:21.4778017 INFO rbatis::plugin::intercept_log - [rbatis] [543710485837516800] query <= len=3,rows=[{"port":"127.0.0.1:1212","hash":"sha256-ZboDAqgy9v7OWbO9ECpoY90z8w9XbpOzgAmMnentGt0=","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"},{"port":"127.0.0.1:1212","hash":"sha256-lrHng4d/3GK7MBZPHX90EIDR553LZB0UV8Uk6q1S1PA=","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"},{"port":"127.0.0.1:1212","hash":"sha256-Uk/kUrXMTZ6NG2GfvXg9kNXZpvFg84KV+Kk9JSR6amY=","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:31:21.4785009 INFO actix_server::builder - starting 16 workers
+2023-09-11 16:31:21.4786541 INFO actix_server::server - Tokio runtime found; starting in existing Tokio runtime
+2023-09-11 16:31:21.4866061 INFO rbatis::plugin::intercept_log - [rbatis] [543710485879459841] query => `select * from database ` []
+2023-09-11 16:31:21.4874016 INFO rbatis::plugin::intercept_log - [rbatis] [543710485879459841] query <= len=3,rows=[{"port":"127.0.0.1:1212","hash":"sha256-ZboDAqgy9v7OWbO9ECpoY90z8w9XbpOzgAmMnentGt0=","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"},{"port":"127.0.0.1:1212","hash":"sha256-lrHng4d/3GK7MBZPHX90EIDR553LZB0UV8Uk6q1S1PA=","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"},{"port":"127.0.0.1:1212","hash":"sha256-Uk/kUrXMTZ6NG2GfvXg9kNXZpvFg84KV+Kk9JSR6amY=","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:31:21.4887774 INFO rbatis::plugin::intercept_log - [rbatis] [543710485887848450] query => `select * from service where uuid = ?` ["6899e135-1ee5-4d2c-8576-f0694e748057"]
+2023-09-11 16:31:21.4898961 INFO rbatis::plugin::intercept_log - [rbatis] [543710485887848450] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"}]
+2023-09-11 16:31:21.4916356 INFO rbatis::plugin::intercept_log - [rbatis] [543710485900431363] query => `select * from service where uuid = ?` ["60ce3d9c-8f48-4310-ba02-6787e9a10d90"]
+2023-09-11 16:31:21.4918962 INFO rbatis::plugin::intercept_log - [rbatis] [543710485900431363] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"}]
+2023-09-11 16:31:21.4921423 INFO rbatis::plugin::intercept_log - [rbatis] [543710485904625668] query => `select * from service where uuid = ?` ["35e10b73-aed3-40f8-ab87-1dc39a587982"]
+2023-09-11 16:31:21.4923812 INFO rbatis::plugin::intercept_log - [rbatis] [543710485904625668] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:31:24.3612762 INFO rbatis::plugin::intercept_log - [rbatis] [543710497938083845] query => `select * from database ` []
+2023-09-11 16:31:24.3621033 INFO rbatis::plugin::intercept_log - [rbatis] [543710497938083845] query <= len=3,rows=[{"port":"127.0.0.1:1212","hash":"sha256-ZboDAqgy9v7OWbO9ECpoY90z8w9XbpOzgAmMnentGt0=","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"},{"port":"127.0.0.1:1212","hash":"sha256-lrHng4d/3GK7MBZPHX90EIDR553LZB0UV8Uk6q1S1PA=","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"},{"port":"127.0.0.1:1212","hash":"sha256-Uk/kUrXMTZ6NG2GfvXg9kNXZpvFg84KV+Kk9JSR6amY=","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:31:24.3631077 INFO rbatis::plugin::intercept_log - [rbatis] [543710497946472454] query => `select * from service where uuid = ?` ["6899e135-1ee5-4d2c-8576-f0694e748057"]
+2023-09-11 16:31:24.3639897 INFO rbatis::plugin::intercept_log - [rbatis] [543710497946472454] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"}]
+2023-09-11 16:31:24.3642371 INFO rbatis::plugin::intercept_log - [rbatis] [543710497950666759] query => `select * from service where uuid = ?` ["60ce3d9c-8f48-4310-ba02-6787e9a10d90"]
+2023-09-11 16:31:24.364417  INFO rbatis::plugin::intercept_log - [rbatis] [543710497950666759] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"}]
+2023-09-11 16:31:24.3646661 INFO rbatis::plugin::intercept_log - [rbatis] [543710497950666760] query => `select * from service where uuid = ?` ["35e10b73-aed3-40f8-ab87-1dc39a587982"]
+2023-09-11 16:31:24.3648509 INFO rbatis::plugin::intercept_log - [rbatis] [543710497950666760] query <= len=1,rows=[{"mode":"HASH_Mode","logs":"<?xml version="1.0" encoding="UTF-8"?>
+<atomic/>","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
+2023-09-11 16:31:48.7552788 INFO rbatis::plugin::intercept_log - [rbatis] [543710600253935625] query => `select * from database ` []
+2023-09-11 16:31:48.7560699 INFO rbatis::plugin::intercept_log - [rbatis] [543710600253935625] query <= len=3,rows=[{"port":"127.0.0.1:1212","hash":"sha256-ZboDAqgy9v7OWbO9ECpoY90z8w9XbpOzgAmMnentGt0=","name":"h100","uuid":"6899e135-1ee5-4d2c-8576-f0694e748057"},{"port":"127.0.0.1:1212","hash":"sha256-lrHng4d/3GK7MBZPHX90EIDR553LZB0UV8Uk6q1S1PA=","name":"h100","uuid":"60ce3d9c-8f48-4310-ba02-6787e9a10d90"},{"port":"127.0.0.1:1212","hash":"sha256-Uk/kUrXMTZ6NG2GfvXg9kNXZpvFg84KV+Kk9JSR6amY=","name":"h100","uuid":"35e10b73-aed3-40f8-ab87-1dc39a587982"}]
