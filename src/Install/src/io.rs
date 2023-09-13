@@ -131,7 +131,7 @@ pub mod file_handler {
                         let uuid = kv.key.clone().unwrap();
                         let kv = KVStore {
                             hash: None,
-                            key: Some(kv.key.unwrap().to_string()),
+                            key: Some(dbg!(kv.key.unwrap().to_string())),
                             value: kv.value,
                         };
                         match match modes {

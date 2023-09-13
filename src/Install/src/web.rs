@@ -1,5 +1,4 @@
 use std::ops::Deref;
-use actix_files::NamedFile;
 use actix_web::{App, get, HttpResponse, HttpServer, Responder, web};
 use actix_web::dev::Server;
 use bevy_reflect::Reflect;
@@ -9,6 +8,8 @@ use serde::{Deserialize, Serialize};
 use Static::{Alexia, Events};
 use Static::alex::Overmaster;
 use Static::base::FutureEx;
+use crate::io::{Disk, KVStore};
+use crate::LOCAL_DEF_DB;
 use crate::rei::Response;
 use crate::setting::database_config::{Database, Service};
 use crate::setting::local_config::{SUPER_DLR_URL, SUPER_URL};
@@ -35,7 +36,7 @@ pub async fn web() -> Events<Server> {
     let mut sup = HttpServer::new(|| {
         let mut ddc = App::new();
         ddc = ddc.route(SUPER_DLR_URL.load().path.as_str(), web::get().to(index));
-        //ddc = ddc.service(download);
+        ddc = ddc.service(download);
         ddc
     });
     for e in erx {
@@ -44,23 +45,27 @@ pub async fn web() -> Events<Server> {
     Ok(sup.bind(SUPER_DLR_URL.load().port)?.run())
 }
 
-// #[get("/{filename}")]
+#[get("/{filename}")]
 async fn download(filename: String) -> impl Responder {
-    let file_path = format!("/{}", filename); // 你的文件路径，这里只是一个例子
     let mut eg = SUPER_URL.load().postgres.connect_bdc().await.unwrap();
     let erx = Database::select_name(&mut eg, &filename).await.unwrap();
     let er = Service::select_name(&mut eg, &filename).await.unwrap();
+    let mut bit = vec![];
     for erx in erx {
-        er.into_par_iter().for_each(|e| {
-            if erx.uuid == e.uuid {
-
+        let xd = er.clone().into_par_iter().find_any(|e| {
+            erx.uuid == e.uuid
+        }).map(|e| {
+            KVStore {
+                hash: Some(String::from(LOCAL_DEF_DB.as_path().to_str().unwrap())),
+                key: Some(e.uuid),
+                value: String::new(),
             }
         });
-    }
-    match NamedFile::open(file_path) {
-        Ok(file) => HttpResponse::Ok().content_type("application/octet-stream").body(""),
-        Err(_) => HttpResponse::NotFound().body("File not found"),
-    }
+        if let Some(e) = xd {
+            bit.push(e.read().await);
+        }
+    };
+    HttpResponse::Ok().content_type("application/octet-stream").body(bit[0].to_vec())
 }
 
 #[derive(Serialize, Deserialize, Debug)]
