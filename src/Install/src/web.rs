@@ -56,7 +56,7 @@ async fn download(filename: String) -> impl Responder {
             erx.uuid == e.uuid
         }).map(|e| {
             KVStore {
-                hash: Some(String::from(LOCAL_DEF_DB.as_path().to_str().unwrap())),
+                hash: None,
                 key: Some(e.uuid),
                 value: String::new(),
             }
